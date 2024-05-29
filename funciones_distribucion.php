@@ -65,6 +65,7 @@ try {
 		$itemRecords["catalogo"] = array();
 		$itemRecords["split_integrantes"] = array();
 		$itemRecords["data"] = array();
+		$itemRecords["candidatos_sirec"] = array();
 
 		// Abro BD para consulta
 		$db = new SQLite3('db/database.db3');
@@ -117,7 +118,7 @@ try {
 		//$qryParticipantes =  getFieldNameParticipan($type, " where ".$name_item." = ".$item." ", $name_item.", ");
 		
 		//$whare .= " and id_tipo_eleccion=".$type;
-		$qryParticipantes = "SELECT id_tipo_eleccion, sum(votos_part_1) as votos_part_1, sum(votos_part_2) as votos_part_2, sum(votos_part_3) as votos_part_3, sum(votos_part_4) as votos_part_4, sum(votos_part_5) as votos_part_5, sum(votos_part_6) as votos_part_6, sum(votos_part_7) as votos_part_7, sum(votos_part_8) as votos_part_8, sum(votos_part_9) as votos_part_9, sum(votos_part_10) as votos_part_10, sum(votos_part_11) as votos_part_11, sum(votos_part_12) as votos_part_12, sum(votos_part_13) as votos_part_13, sum(votos_part_14) as votos_part_14, sum(votos_part_15) as votos_part_15, sum(votos_part_16) as votos_part_16, sum(votos_part_17) as votos_part_17, sum(votos_part_18) as votos_part_18, sum(votos_part_19) as votos_part_19, sum(votos_part_20) as votos_part_20, sum(votos_part_21) as votos_part_21, sum(votos_part_22) as votos_part_22, sum(votos_part_23) as votos_part_23, sum(votos_part_24) as votos_part_24, sum(votos_part_25) as votos_part_25, sum(votos_part_26) as votos_part_26, sum(votos_part_27) as votos_part_27, sum(votos_part_28) as votos_part_28, sum(votos_part_29) as votos_part_29, sum(votos_part_30) as votos_part_30, sum(votos_part_31) as votos_part_31, sum(votos_part_32) as votos_part_32, sum(votos_part_33) as votos_part_33, sum(votos_part_34) as votos_part_34, sum(votos_part_35) as votos_part_35, sum(total_votos_cc1) as total_votos_cc1, sum(total_votos_cc2) as total_votos_cc2, sum(total_votos_cc3) as total_votos_cc3, sum(total_votos_cc4) as total_votos_cc4, sum(total_votos_cc5) as total_votos_cc5, sum(total_votos_cc6) as total_votos_cc6, sum(total_votos_cc7) as total_votos_cc7, sum(total_votos_cc8) as total_votos_cc8, sum(total_votos_cc9) as total_votos_cc9, sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total, sum(boletas_sob) as boletas_sob, sum(ciudadanos_votaron) as ciudadanos_votaron, sum(representantes_votaron) as representantes_votaron, sum(total_votaron) as total_votaron, sum(boletas_extraidas) as boletas_extraidas, sum(total_sobres) as total_sobres  FROM prep_votos ";
+		$qryParticipantes = "SELECT id_tipo_eleccion, sum(votos_part_1) as votos_part_1, sum(votos_part_2) as votos_part_2, sum(votos_part_3) as votos_part_3, sum(votos_part_4) as votos_part_4, sum(votos_part_5) as votos_part_5, sum(votos_part_6) as votos_part_6, sum(votos_part_7) as votos_part_7, sum(votos_part_8) as votos_part_8, sum(votos_part_9) as votos_part_9, sum(votos_part_10) as votos_part_10, sum(votos_part_11) as votos_part_11, sum(votos_part_12) as votos_part_12, sum(votos_part_13) as votos_part_13, sum(votos_part_14) as votos_part_14, sum(votos_part_15) as votos_part_15, sum(votos_part_16) as votos_part_16, sum(votos_part_17) as votos_part_17, sum(votos_part_18) as votos_part_18, sum(votos_part_19) as votos_part_19, sum(votos_part_20) as votos_part_20, sum(votos_part_21) as votos_part_21, sum(votos_part_22) as votos_part_22, sum(votos_part_23) as votos_part_23, sum(votos_part_24) as votos_part_24, sum(votos_part_25) as votos_part_25, sum(votos_part_26) as votos_part_26, sum(votos_part_27) as votos_part_27, sum(votos_part_28) as votos_part_28, sum(votos_part_29) as votos_part_29, sum(votos_part_30) as votos_part_30, sum(votos_part_31) as votos_part_31, sum(votos_part_32) as votos_part_32, sum(votos_part_33) as votos_part_33, sum(votos_part_34) as votos_part_34, sum(votos_part_35) as votos_part_35, sum(total_votos_cc1) as total_votos_cc1, sum(total_votos_cc2) as total_votos_cc2, sum(total_votos_cc3) as total_votos_cc3, sum(total_votos_cc4) as total_votos_cc4, sum(total_votos_cc5) as total_votos_cc5, sum(total_votos_cc6) as total_votos_cc6, sum(total_votos_cc7) as total_votos_cc7, sum(total_votos_cc8) as total_votos_cc8, sum(total_votos_cc9) as total_votos_cc9, sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total, sum(boletas_sob) as boletas_sob, sum(ciudadanos_votaron) as ciudadanos_votaron, sum(representantes_votaron) as representantes_votaron, sum(total_votaron) as total_votaron, sum(boletas_extraidas) as boletas_extraidas, sum(total_sobres) as total_sobres  FROM scd_votos ";
 		
 		if ($type == 1){
 			$qryParticipantes .= $whare." where contabilizar = 'T' AND id_tipo_eleccion=".$type;
@@ -162,6 +163,44 @@ try {
 	*/
 		// USO:   http://localhost/prep2024/funciones_distribucion.php?type=4&item=3&item_2=&item_3=
 		
+		// ! INTEGRACIÓM LDRM
+		// Leer el archivo JSON existente
+        $jsonFilePath = 'db/candidatos.json'; // Ruta a tu archivo JSON
+        $jsonContent = file_get_contents($jsonFilePath);
+        $jsonData = json_decode($jsonContent, true);
+
+        if (count($jsonData) > 0) {
+            foreach ($jsonData as $element) {
+                if ($element['type'] == $type) {
+                    // Solo los elementos que coincidan con el type recibido
+                    $matchingCandidatos = array();
+                    foreach ($element['candidatos'] as $value) {
+                        if ($value['id_ambito'] == $item) {
+                            // Agregar solo los candidatos donde coincida el valor de $item con $value['id_ambito'] pa filtrar
+                            $matchingCandidatos[] = $value;
+                        }
+                    }
+                    if (!empty($matchingCandidatos)) {
+                        $itemRecords['candidatos_sirec'] = $matchingCandidatos;
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Agregar un nuevo elemento al array $itemRecords que será una copia del objeto catalogo (para no mover ese obj)
+        $itemRecordsWithCandidatos = array();
+        foreach ($itemRecords["catalogo"] as $catalogItem) {
+            $newItem = $catalogItem;
+            foreach ($itemRecords['candidatos_sirec'] as $candidato) {
+                if ($catalogItem['id_participante'] == $candidato['id_participante']) {
+                    $newItem = array_merge($newItem, $candidato);
+                }
+            }
+            $itemRecordsWithCandidatos[] = $newItem;
+        }
+        $itemRecords["catalogo_con_candidatos_sirec"] = $itemRecordsWithCandidatos;
+
 		echo json_encode($itemRecords);	
 		return;
 	}

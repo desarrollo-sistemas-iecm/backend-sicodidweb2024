@@ -28,7 +28,20 @@ try {
 	if($_SERVER['REQUEST_METHOD']=="GET"){
 		
 		$type = trim(htmlentities($_GET["type"]));
-		$item = trim(htmlentities($_GET["item"]));
+		
+		if(isset($_GET["item"])){
+			if($_GET["item"]!=''){
+				$item = trim(htmlentities($_GET["item"]));
+			}
+			else{
+				$item = 1;
+
+			}
+		}
+		else{ 
+			$item = 1;
+		}
+	
 		$item_2=""; $item_3="";
 		if(isset($_GET["item_2"])) $item_2 = trim(htmlentities($_GET["item_2"]));
 		if(isset($_GET["item_3"])) $item_3 = trim(htmlentities($_GET["item_3"]));
@@ -69,7 +82,6 @@ try {
 				break;
 			case 2:
 				$name_item ="V.id_distrito";
-				if($item=="") $item="1";
 				$qryParticipantes = 'select MR.id_participante, P.descripcion, P.siglas, MR.id_distrito, 
 				MR.tipo_participante, 	MR.prelacion, MR.integrantes   from scd_participantes_mr MR 
 				left join scd_cat_participantes P
@@ -77,7 +89,6 @@ try {
 				where id_distrito= '.$item.';';
 				break;
 			case 3:
-				if($item=="") $item="1";
 				$name_item ="V.id_distrito";
 				$qryParticipantes = 'select RP.id_participante, P.descripcion, P.siglas, RP.id_distrito, 
 				RP.tipo_participante, 	RP.prelacion, RP.integrantes   from scd_participantes_rp RP 
@@ -86,7 +97,6 @@ try {
 				where id_distrito= '.$item.';';
 				break;
 			case 4:
-				if($item=="") $item="2";
 				$name_item ="V.id_delegacion";
 				$qryParticipantes = 'select JD.id_participante, P.descripcion, P.siglas, JD.id_delegacion, 
 				JD.tipo_participante, 	JD.prelacion, JD.integrantes   from scd_participantes_jdel JD 
@@ -96,8 +106,8 @@ try {
 				break;
 		}
 		
-		//echo $qryParticipantes; die();
-		
+	//echo $qryParticipantes; die();
+	
 		// apertura de BD
 		$reg_data=0;
 		$db = new SQLite3('db/database.db3');
@@ -105,6 +115,7 @@ try {
 		
 		$itemRecords["value_fields"] = array();
 		$db->enableExceptions(false);
+		
 		while ($row = $res_catch->fetchArray(SQLITE3_ASSOC))
 		{
 			//$var_catch = $row_catch['value']." - ".$row_catch['label']."<br>";
@@ -120,7 +131,7 @@ try {
 		$llave=0;
 		
 		$qryData = 'SELECT V.id_delegacion, V.id_distrito, V.id_seccion, V.tipo_casilla '.$participan.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, votacion_total  
-		FROM prep_votos V 
+		FROM scd_votos V 
 		left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla

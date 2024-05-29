@@ -92,9 +92,9 @@ function urbanasNoUrbanasENTIDAD($type, $item, $item_2, $item_3, $db)
 			break;
 	}
 		
-	$sqlNO_URBANA = "SELECT count(id_distrito) as [NO_URBANAS] FROM prep_votos where clave_mdc in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
+	$sqlNO_URBANA = "SELECT count(id_distrito) as [NO_URBANAS] FROM scd_votos where clave_mdc in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
 
-	$sqlURBANA = "SELECT count(id_distrito) as [URBANAS] FROM prep_votos where clave_mdc not in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
+	$sqlURBANA = "SELECT count(id_distrito) as [URBANAS] FROM scd_votos where clave_mdc not in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
 	
 	
 	
@@ -156,7 +156,7 @@ try {
 		
 		
 		// Data general
-		$itemRecords = getAvanceContabilizadaResumen($db);
+		$itemRecords = getAvanceContabilizadaResumen($db, $type);
 		
 		// 16/ABRIL/2024
 		//echo $itemRecords["avance_dmr"][0]["actas_capturadas"]; die();
@@ -196,6 +196,8 @@ try {
 		// consigo Rankig ganadores 
 		$items_winner_JG = getRecordSetMap(1, $db);
 		$items_winner_MR = getRecordSetMap(2, $db);
+		
+			//echo var_dump($items_winner_MR); die();
 		$items_winner_RP = getRecordSetMap(3, $db);
 		$items_winner_ALC = getRecordSetMap(4, $db);
 		
@@ -241,8 +243,8 @@ try {
 		// DTOS y ALCALDIAS GANADAS (dmr/alcaldes)
 		
 		
-		$winDTO_MR = contarItemsPorParticipante($items_winner_MR);
-		$winALC_ALC = contarItemsPorParticipante($items_winner_ALC);
+		$winDTO_MR = contarItemsPorParticipante($items_winner_MR, 2, $db);
+		$winALC_ALC = contarItemsPorParticipante($items_winner_ALC, 4, $db);
 		// Dtos ganados (DMR)
 		$itemRecords["win_dto_dmr"] = $winDTO_MR;
 		// Dtos ganados (DMR)

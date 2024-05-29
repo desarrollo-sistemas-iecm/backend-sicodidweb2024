@@ -217,7 +217,7 @@ try {
 		
 	/*
 		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito '.$participan.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, votacion_total, "" as observaciones 
-		FROM prep_votos V 
+		FROM scd_votos V 
 		left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
@@ -255,7 +255,7 @@ try {
         ELSE "--" 
     END as "observaciones"
 		, contabilizar, '.$nombre_campo_acta.', '.$md5_campo_acta.',  V.ue_identificador_comprobante as ue_identificador_comprobante, V.ue_circunscripcion_federal, ue_id_casilla, V.ue_tipo_casilla, V.ue_id_ext_contigua, V.ue_tipo_documento, V.ue_personas_votaron, V.ue_identificacion, V.ue_votos_partidos, V.ue_version_software, V.ue_fecha_impresion, V.ue_codigo_integridad, V.ue_qr   
-		FROM prep_votos V 
+		FROM scd_votos V 
 		left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla

@@ -89,10 +89,11 @@ function getFieldNameParticipan($type, $where="", $campoExtra1="", $where2="" ){
 				$coma = ", ";
 		}
 		
-		$participanSQL =  "Select ".$campoCorte.$participanSQL.", sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total from prep_votos ".$where.$where2;
+		$participanSQL =  "Select ".$campoCorte.$participanSQL.", sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total from scd_votos ".$where.$where2;
 	
+	// echo $participanSQL; die();
 	/*	
-		$participanSQL =  "Select ".$campoCorte.$participanSQL.", votos_cand_no_reg as [Candidatos no registrados], votos_nulos as [Votos nulos], votacion_total as [Votación total] from prep_votos ".$where.$where2;
+		$participanSQL =  "Select ".$campoCorte.$participanSQL.", votos_cand_no_reg as [Candidatos no registrados], votos_nulos as [Votos nulos], votacion_total as [Votación total] from scd_votos ".$where.$where2;
 	*/	
 		
 		$db->close();
@@ -237,8 +238,9 @@ try {
 				$qryParticipantes .= " and tipo_casilla = '".$item_3."'";
 			}
 		}
-		$qryParticipantes .= " and id_tipo_eleccion=".$type." group by ".$name_item;
-		//echo $qryParticipantes; return;
+		$qryParticipantes .= " and id_tipo_eleccion=".$type." and contabilizar ='T' group by ".$name_item;
+		
+	// echo $qryParticipantes; die();
 		
 		$records = getRecordsetCarrousel($qryParticipantes);
 		

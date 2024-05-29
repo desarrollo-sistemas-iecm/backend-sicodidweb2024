@@ -26,8 +26,7 @@ if($method!='GET'){
 
 include "helpers.php";
 
-try {
-	if($_SERVER['REQUEST_METHOD']=="GET"){
+function LeeVotosPrep(){
 		
 		$type = trim(htmlentities($_GET["type"]));
 		$item = trim(htmlentities($_GET["item"]));
@@ -81,21 +80,22 @@ try {
 				$qryParticipantes = 'select DISTINCT MR.id_participante, P.descripcion, P.siglas,
 				MR.tipo_participante  from scd_participantes_mr MR 
 				left join scd_cat_participantes P
-				on MR.id_participante = P.id_participante;';
+				on MR.id_participante = P.id_participante where MR.id_participante in(1,2,3,4,5,6,7,8,10,14);';
 				break;
 			case 3:
 				$name_item ="V.id_distrito";
 				$qryParticipantes = 'select DISTINCT RP.id_participante, P.descripcion, P.siglas, 
 				RP.tipo_participante   from scd_participantes_rp RP 
 				left join scd_cat_participantes P
-				on RP.id_participante = P.id_participante;';
+				on RP.id_participante = P.id_participante
+				';
 				break;
 			case 4:
 				$name_item ="V.id_delegacion";
 				$qryParticipantes = 'select DISTINCT JD.id_participante, P.descripcion, P.siglas,
 				JD.tipo_participante  from scd_participantes_jdel JD 
 				left join scd_cat_participantes P
-				on JD.id_participante = P.id_participante;';
+				on JD.id_participante = P.id_participante where JD.id_participante in(4,5,6,7,9,10,14);';
 				break;
 		}
 				
@@ -132,57 +132,82 @@ try {
 				if($primecampo == "") {
 					$primecampo = "votos_part_".$valor["id_participante"];
 				}
+				/*
 				else{
 					//if($primecampo == "votos_part_".$valor["id_participante"] && $valor["id_participante"]>10) continue;
 					if($primecampo == "votos_part_".$valor["id_participante"] || $valor["id_participante"]>10) continue;
 				}
+				*/
 				
 
 				//echo "<br><br>".$clave." - ".$valor["id_participante"]." - ".$valor["descripcion"];
-				$participan .= (', votos_part_'.$valor["id_participante"]);
-				$participanSUM .= (', SUM(votos_part_'.$valor["id_participante"].') as votos_part_'.$valor["id_participante"]);
-				
-				
-				if($valor["id_participante"]==10){
-					$participan .= (', votos_part_14');
-				$participanSUM .= (', SUM(votos_part_14) as votos_part_14');
-				
+				if($valor["id_participante"]<=10) {
+						if($valor["id_participante"]<=9){
+								$participan .= (', votos_part_'.$valor["id_participante"]);
+								$participanSUM .= (', SUM(votos_part_'.$valor["id_participante"].') as votos_part_'.$valor["id_participante"]);
+						}
+						
+						if($valor["id_participante"]==10){
+							
+							if($type=="2"){
+								$participan .= (', votos_part_10');
+								$participanSUM .= (', sum (ifnull(votos_part_10,0)+ifnull(votos_part_11,0)+ifnull(votos_part_12,0)+ifnull(votos_part_13,0)) as votos_part_10');
+						
+							}
+							else{
+								$participan .= (', votos_part_10');
+								$participanSUM .= (', sum (ifnull(votos_part_1,0)+ifnull(votos_part_2,0)+ifnull(votos_part_3,0)+ifnull(votos_part_10,0)+ifnull(votos_part_11,0)+ifnull(votos_part_12,0)+ifnull(votos_part_13,0)) as votos_part_10');
+							
+							}
+							
+							if($type=="4"){
+								$participan .= (', votos_part_14');
+								$participanSUM .= (', sum (ifnull(total_votos_cc5,0)) as votos_part_14');
+						
+							}
+							else{
+								$participan .= (', votos_part_14');
+								$participanSUM .= (', sum (ifnull(votos_part_4,0)+ifnull(votos_part_5,0)+ifnull(votos_part_7,0)+ifnull(votos_part_14, 0) +ifnull(votos_part_15,0)+ifnull(votos_part_16,0)+ifnull(votos_part_17,0)) as votos_part_14');
+						
+							}
+						}
+						// Armo nombre y tipo de las columnas
+						//$llave++;
+						$llave = $valor["id_participante"];
+						$realName = 'votos_part_'.$valor["id_participante"];
+			
+						$columna = array(
+								"dataIndex" => $realName,
+								"key"=>$llave,
+								"title" => $realName,
+								"resizable" => 'resizable',
+								"width"=> 100,
+								"minWidth"=> 100,
+								"maxWidth"=> 200
+						);
+						$itemNameRecords[]= $columna;
+						
+						if($valor["id_participante"]==10){
+							$columna = array(
+									"dataIndex" => "votos_part_14",
+									"key"=>14,
+									"title" => "votos_part_14",
+									"resizable" => 'resizable',
+									"width"=> 100,
+									"minWidth"=> 100,
+									"maxWidth"=> 200
+							);
+							$itemNameRecords[]= $columna;
+							
+						}					
 				}
-				// Armo nombre y tipo de las columnas
-				//$llave++;
-				$llave = $valor["id_participante"];
-				$realName = 'votos_part_'.$valor["id_participante"];
-	
-				$columna = array(
-						"dataIndex" => $realName,
-						"key"=>$llave,
-						"title" => $realName,
-						"resizable" => 'resizable',
-						"width"=> 100,
-						"minWidth"=> 100,
-						"maxWidth"=> 200
-				);
-				$itemNameRecords[]= $columna;
 				
-				if($valor["id_participante"]==10){
-					$columna = array(
-							"dataIndex" => "votos_part_14",
-							"key"=>14,
-							"title" => "votos_part_14",
-							"resizable" => 'resizable',
-							"width"=> 100,
-							"minWidth"=> 100,
-							"maxWidth"=> 200
-					);
-					$itemNameRecords[]= $columna;
-					
-				}
 			
 			
 		}
 		
 		
-		//echo "<br>".$participan; return;
+	//echo "<br>".$participan; return;
 		
 		//echo $participanSUM; return ;
 		// Cargo últimos nombre de columnas
@@ -216,18 +241,18 @@ try {
 		
 		/*
 		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito '.$participanSUM.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, votacion_total  
-		FROM prep_votos V 
+		FROM scd_votos V 
 		left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
 		where V.id_tipo_eleccion= '.$type.' limit 4;';
 		*/
 		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito '.$participanSUM.', sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total, sum(boletas_sob) as boletas_sob, sum(ciudadanos_votaron) as ciudadanos_votaron, sum(representantes_votaron) as representantes_votaron, sum(total_votaron) as total_votaron, sum(C.lista_nominal) as lista_nominal  
-		FROM prep_votos V 
+		FROM scd_votos V 
 		left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
-		where contabilizar="T" and V.id_tipo_eleccion= '.$type.' limit 4;';
+		where validado	="T" and contabilizar="T"  and V.id_tipo_eleccion= '.$type;
 		
 		if($type>=1){
 			// $qryData .= " and ".$name_item.'='.$item;
@@ -241,11 +266,16 @@ try {
 			$qryData .= " and V.tipo_casilla = '".$item_3."';";
 		}
 		
+		if($item!=""){
+			$qryData .= " and ".$name_item." = ".$item;
+		}
+		
+		$qryData .= "  limit 4;";
 					
 		$itemRecords["columns"] = $itemNameRecords;
 		
 		
-		//echo "<br>".$qryData; return;
+//echo "<br>".$qryData; return;
 		
 		$itemRecords["data"] = array();
 		$itemRecords["participacion"]= array();
@@ -354,72 +384,13 @@ try {
 		echo json_encode($itemRecords);
 			
 		return;
-		
-		/// --   SUPLE:
-		/*
-		$error = 0;
-		echo '{
-				"data" : [
-						{
-						  "key": "1",
-						  "name": "John Brown",
-						  "age": 32,
-						  "address": "New York No. 1 Lake Park",
-						  "tags": ["nice", "developer"]
-						}, 
-						{
-						  "key": "2",
-						  "name": "Jim Green",
-						  "age": 42,
-						  "address": "London No. 1 Lake Park",
-						  "tags": ["loser"]
-						}, 
-						{
-						  "key": "3",
-						  "name": "Joe Black",
-						  "age": 32,
-						  "address": "Sidney No. 1 Lake Park",
-						  "tags": ["cool", "teacher"]
-						}
-					],
-					
-				"columns" : [
-					{
-					  "dataIndex": "name",
-					  "key": "name",
-					  "resizable": true,
-					  "width": 150
-					}, 
-					{
-					  "title": "Age",
-					  "dataIndex": "age",
-					  "key": "age",
-					  "resizable": true,
-					  "width": 100,
-					  "minWidth": 100,
-					  "maxWidth": 200
-					}, 
-					{
-					  "title": "Address",
-					  "dataIndex": "address",
-					  "key": "address"
-					}, 
-					{
-					  "title": "Tags",
-					  "key": "tags",
-					  "dataIndex": "tags"
-					},
-					{
-					  "title": "Action",
-					  "key": "action"
-					}
-				]
-							
+	
+}
 
-			}
-		';
-		
-		*/
+
+try {
+	if($_SERVER['REQUEST_METHOD']=="GET"){
+			LeeVotosPrep();
 	}
 	else{
 		$error=666;

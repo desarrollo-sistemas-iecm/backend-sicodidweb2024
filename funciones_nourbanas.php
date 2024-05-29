@@ -65,9 +65,9 @@ function urbanasNoUrbanas($type, $item, $item_2, $item_3, $db)
 			break;
 	}
 		
-	$sqlNO_URBANA = "SELECT count(id_distrito) as [NO_URBANAS] FROM prep_votos where clave_mdc in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
+	$sqlNO_URBANA = "SELECT count(id_distrito) as [NO_URBANAS] FROM scd_votos where clave_mdc in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
 
-	$sqlURBANA = "SELECT count(id_distrito) as [URBANAS] FROM prep_votos where clave_mdc not in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
+	$sqlURBANA = "SELECT count(id_distrito) as [URBANAS] FROM scd_votos where clave_mdc not in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
 	
 	
 	if($item_2!=""){

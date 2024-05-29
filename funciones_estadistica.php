@@ -89,9 +89,9 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 			break;
 	}
 		
-	$sqlNO_URBANA = "SELECT count(id_distrito) as [NO_URBANAS] FROM prep_votos where clave_mdc in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
+	$sqlNO_URBANA = "SELECT count(id_distrito) as [NO_URBANAS] FROM scd_votos where clave_mdc in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
 
-	$sqlURBANA = "SELECT count(id_distrito) as [URBANAS] FROM prep_votos where clave_mdc not in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
+	$sqlURBANA = "SELECT count(id_distrito) as [URBANAS] FROM scd_votos where clave_mdc not in(SELECT clave_mdc FROM nourbanas) and id_tipo_eleccion='".$type_param."' and contabilizar='T' ".$whare;
 	
 	
 	
@@ -215,13 +215,13 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 			$total_por = "0%";
 			/*
 			echo "SELECT id_tipo_eleccion,  count(C.id_distrito) as [cuantos], sum(C.lista_nominal) as ln, sum(votos_cand_no_reg) as [votos_cand_no_reg], sum(votos_nulos)  as [votos_nulos],
-			 sum(votacion_total) as votacion_total FROM prep_votos P
+			 sum(votacion_total) as votacion_total FROM scd_votos P
 			left join scd_casillas C 
 			on P.id_distrito = C.id_distrito and P.id_delegacion = C.id_delegacion and P.id_seccion = C.id_seccion and P.tipo_casilla = C.tipo_casilla where P.".$campoFiltro." = ".$item." and id_tipo_eleccion = ".$type;
 			die();*/
 			
 			$res_catch = $db->query("SELECT id_tipo_eleccion,  count(C.id_distrito) as [cuantos], sum(C.lista_nominal) as ln, sum(votos_cand_no_reg) as [votos_cand_no_reg], sum(votos_nulos)  as [votos_nulos],
-			 sum(votacion_total) as votacion_total FROM prep_votos P
+			 sum(votacion_total) as votacion_total FROM scd_votos P
 			left join scd_casillas C 
 			on P.id_distrito = C.id_distrito and P.id_delegacion = C.id_delegacion and P.id_seccion = C.id_seccion and P.tipo_casilla = C.tipo_casilla where P.".$campoFiltro." = ".$item." and id_tipo_eleccion = ".$type);	
 			
@@ -297,7 +297,7 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 			// PARA CAPTURADAS Y CONTABILIZADAS: 13/Mayo/2021
 			//---------------------------------------------------------
 			$res_catch = $db->query("SELECT id_tipo_eleccion, count(C.id_distrito) as [cuantos], sum(C.lista_nominal) as ln, sum(votos_cand_no_reg) as [votos_cand_no_reg], sum(votos_nulos)  as [votos_nulos],
-			 sum(votacion_total) as votacion_total FROM prep_votos P
+			 sum(votacion_total) as votacion_total FROM scd_votos P
 			left join scd_casillas C 
 			on P.id_distrito = C.id_distrito and P.id_delegacion = C.id_delegacion and P.id_seccion = C.id_seccion and P.tipo_casilla = C.tipo_casilla
 			where id_tipo_eleccion = ".$type." and P.".$campoFiltro." = ".$item." group by  id_tipo_eleccion");	
@@ -324,7 +324,7 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 			$total_por = "0%";
 			
 			$res_catch2 = $db->query("SELECT id_tipo_eleccion, count(C.id_distrito) as [cuantos], sum(C.lista_nominal) as ln, sum(votos_cand_no_reg) as [votos_cand_no_reg], sum(votos_nulos)  as [votos_nulos],
-			 sum(votacion_total) as votacion_total FROM prep_votos P
+			 sum(votacion_total) as votacion_total FROM scd_votos P
 			left join scd_casillas C 
 			on P.id_distrito = C.id_distrito and P.id_delegacion = C.id_delegacion and P.id_seccion = C.id_seccion and P.tipo_casilla = C.tipo_casilla
 			where contabilizar='T' and id_tipo_eleccion = ".$type." and P.".$campoFiltro." = ".$item." group by  id_tipo_eleccion");	
@@ -375,13 +375,13 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 			}
 			
 			// ESPECIALES
-			//SELECT sum(votacion_total)  FROM prep_votos  where id_tipo_eleccion=1 and substr(tipo_casilla,1,1) ='S';
+			//SELECT sum(votacion_total)  FROM scd_votos  where id_tipo_eleccion=1 and substr(tipo_casilla,1,1) ='S';
 			$cont_esp1 =0;
 			$cont_esp2 =0;
 			$cont_esp3 =0;
 			$cont_esp4 =0;
 			$res_catch2 = $db->query("SELECT id_tipo_eleccion, count(C.id_distrito) as [cuantos], sum(C.lista_nominal) as ln, sum(votos_cand_no_reg) as [votos_cand_no_reg], sum(votos_nulos)  as [votos_nulos],
-			 sum(votacion_total) as votacion_total FROM prep_votos P
+			 sum(votacion_total) as votacion_total FROM scd_votos P
 			left join scd_casillas C 
 			on P.id_distrito = C.id_distrito and P.id_delegacion = C.id_delegacion and P.id_seccion = C.id_seccion and P.tipo_casilla = C.tipo_casilla
 			where substr(P.tipo_casilla,1,1) ='S' and contabilizar='T' and id_tipo_eleccion = ".$type." and P.".$campoFiltro." = ".$item." group by  id_tipo_eleccion");	
@@ -427,13 +427,13 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 			//---------------------------------------
 			
 			// SIN ESPECIALES
-			//SELECT sum(votacion_total)  FROM prep_votos  where id_tipo_eleccion=1 and substr(tipo_casilla,1,1) ='S';
+			//SELECT sum(votacion_total)  FROM scd_votos  where id_tipo_eleccion=1 and substr(tipo_casilla,1,1) ='S';
 			$cont_s_esp1 =0;
 			$cont_s_esp2 =0;
 			$cont_s_esp3 =0;
 			$cont_s_esp4 =0;
 			$res_catch2 = $db->query("SELECT id_tipo_eleccion, count(C.id_distrito) as [cuantos], sum(C.lista_nominal) as ln, sum(votos_cand_no_reg) as [votos_cand_no_reg], sum(votos_nulos)  as [votos_nulos],
-			 sum(votacion_total) as votacion_total FROM prep_votos P
+			 sum(votacion_total) as votacion_total FROM scd_votos P
 			left join scd_casillas C 
 			on P.id_distrito = C.id_distrito and P.id_delegacion = C.id_delegacion and P.id_seccion = C.id_seccion and P.tipo_casilla = C.tipo_casilla
 			where substr(P.tipo_casilla,1,1) <>'S' and contabilizar='T' and id_tipo_eleccion = ".$type." and P.".$campoFiltro." = ".$item." group by  id_tipo_eleccion");	
@@ -510,6 +510,8 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 				$celTotalCaptura_F = $row["cuantos"];
 				$celTotalLN_F = $row["ln"];
 				$celTotalVotos_F = $row["votacion_total"];
+		
+		///echo $celTotalLN_F; die();		
 				// Cargamos variables
 				if($celTotalLN_F>0)
 				 {
@@ -628,7 +630,8 @@ function urbanasNoUrbanasCategoria($type, $item, $item_2, $item_3, $db)
 					"total_por" => "100.0000%",
 					"voto_especiales"=>$tmpEsp,
 					"voto_sin_especiales"=>$tmpSinEsp,
-					"suma_esp_sinesp"=> $tmpSumaEspNoEsp
+					"suma_esp_sinesp"=> $tmpSumaEspNoEsp,
+					"ln"=>$celTotalLNesperada_F
 				);
 				
 				switch ($row['id_tipo_eleccion']) {

@@ -37,7 +37,7 @@ from (
         SUM(votos_cand_no_reg) AS votos_cand_no_reg, 
         SUM(votos_nulos) AS votos_nulos,
         SUM(votacion_total) AS votacion_total
-    FROM prep_votos P
+    FROM scd_votos P
         LEFT JOIN scd_casillas C 
         ON P.id_distrito = C.id_distrito 
         AND P.id_delegacion = C.id_delegacion 
@@ -59,7 +59,7 @@ from (
 			SUM(votos_cand_no_reg) AS votos_cand_no_reg, 
 			SUM(votos_nulos) AS votos_nulos,
 			SUM(votacion_total) AS votacion_total
-		FROM prep_votos P
+		FROM scd_votos P
 			LEFT JOIN scd_casillas C 
 			ON P.id_distrito = C.id_distrito 
 			AND P.id_delegacion = C.id_delegacion 
@@ -83,7 +83,7 @@ from (
 				SUM(votos_cand_no_reg) AS votos_cand_no_reg, 
 				SUM(votos_nulos) AS votos_nulos,
 				SUM(votacion_total) AS votacion_total
-			FROM prep_votos P
+			FROM scd_votos P
 				LEFT JOIN scd_casillas C 
 				ON P.id_distrito = C.id_distrito 
 				AND P.id_delegacion = C.id_delegacion 

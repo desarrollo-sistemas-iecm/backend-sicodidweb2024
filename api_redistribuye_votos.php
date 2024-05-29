@@ -155,7 +155,7 @@ try {
 				sum(ciudadanos_votaron) as ciudadanos_votaron, sum(representantes_votaron) as representantes_votaron, 
 				sum(total_votaron) as total_votaron, sum(boletas_extraidas) as boletas_extraidas, 
 				sum(total_sobres) as total_sobres 
-					FROM prep_votos where id_tipo_eleccion= ".$type;
+					FROM scd_votos where id_tipo_eleccion= ".$type;
 		
 		if($item!=""){
 			$qryData .= " and ".$name_item.'='.$item;

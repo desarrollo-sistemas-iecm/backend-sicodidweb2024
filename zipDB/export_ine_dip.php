@@ -133,7 +133,7 @@ try {
        CASE WHEN substr(P.tipo_casilla, 1, 1) = 'S' THEN 'ACTA UE' ELSE 'ACTA PREP'
 				 END as 'TIPO_DOCUMENTO'
 			FROM scd_casillas as C
-                 left join prep_votos P 
+                 left join scd_votos P 
                  on P.id_distrito = C.id_distrito 
                  and P.id_delegacion = C.id_delegacion 
                  and P.id_seccion = C.id_seccion 
@@ -216,7 +216,7 @@ foreach ($blanks as $fields) {
 /////////// CAPTURADADS ////////
 $q="SELECT id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nominal) AS ln, 
         SUM(votos_cand_no_reg) AS votos_cand_no_reg,  SUM(votos_nulos) AS votos_nulos, SUM(votacion_total) AS votacion_total
-    FROM prep_votos P
+    FROM scd_votos P
         LEFT JOIN scd_casillas C 
         ON P.id_distrito = C.id_distrito 
         AND P.id_delegacion = C.id_delegacion 
@@ -238,7 +238,7 @@ $q="SELECT id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nomina
 
 ///////////////////////////
 $q ="
-SELECT count(inconsistencia) as actas_fuera_catalogo FROM prep_votos where id_tipo_eleccion in(2,3) and inconsistencia=5";
+SELECT count(inconsistencia) as actas_fuera_catalogo FROM scd_votos where id_tipo_eleccion in(2,3) and inconsistencia=5";
 
         $rows = $db->query($q);
         if($r = $rows->fetchArray())
@@ -251,7 +251,7 @@ SELECT count(inconsistencia) as actas_fuera_catalogo FROM prep_votos where id_ti
 //////////////// con inconsistencia de tipo 3 6y 7 para el porcentaje de actas con inconsistecia //////////////
 
 $q ="
-SELECT count(inconsistencia) as inconsistencia FROM prep_votos where id_tipo_eleccion in(2,3) and inconsistencia in (1,2,3,4,6,7)";
+SELECT count(inconsistencia) as inconsistencia FROM scd_votos where id_tipo_eleccion in(2,3) and inconsistencia in (1,2,3,4,6,7)";
 
         $rows = $db->query($q);
         if($r = $rows->fetchArray())
@@ -270,7 +270,7 @@ SELECT count(inconsistencia) as inconsistencia FROM prep_votos where id_tipo_ele
 
 $q="SELECT id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nominal) AS ln, 
         SUM(votos_cand_no_reg) AS votos_cand_no_reg, SUM(votos_nulos) AS votos_nulos,
-        SUM(votacion_total) AS votacion_total, sum(ciudadanos_votaron) as ciudadanos_votaron FROM prep_votos P
+        SUM(votacion_total) AS votacion_total, sum(ciudadanos_votaron) as ciudadanos_votaron FROM scd_votos P
         LEFT JOIN scd_casillas C ON P.id_distrito = C.id_distrito 
         AND P.id_delegacion = C.id_delegacion 
         AND P.id_seccion = C.id_seccion 
@@ -287,7 +287,7 @@ $q="SELECT id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nomina
        }
 //////////// Me traigo las especiales por voto ///////
         
-  $q="select count(*)as especial from prep_votos where tipo_casilla like '%S%'and
+  $q="select count(*)as especial from scd_votos where tipo_casilla like '%S%'and
  id_tipo_eleccion in(2,3) and contabilizar ='T'";
  
  $rows = $db->query($q);
@@ -307,7 +307,7 @@ SELECT id_tipo_eleccion, count(C.id_distrito) AS cuantos, SUM(C.lista_nominal) A
 SUM(votos_cand_no_reg) AS votos_cand_no_reg, 
 SUM(votos_nulos) AS votos_nulos,
 SUM(votacion_total) AS votacion_total
-FROM prep_votos P
+FROM scd_votos P
 LEFT JOIN scd_casillas C 
 ON P.id_distrito = C.id_distrito 
 AND P.id_delegacion = C.id_delegacion 

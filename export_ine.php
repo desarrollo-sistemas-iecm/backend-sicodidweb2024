@@ -58,7 +58,7 @@ try {
 				 'dd/mm/yyyy hh_mm:ss (UTC-6)' as 'fecha_hora_verificacion', 'CASILLA' as origen, 'ESCANER' as 'digitalizacion',
 				 'ACTA PREP' as 'tipo_documento'
 				 from scd_casillas as C
-				left join prep_votos P 
+				left join scd_votos P 
 				on P.id_distrito = C.id_distrito 
 				and P.id_delegacion = C.id_delegacion 
 				and P.id_seccion = C.id_seccion 
