@@ -61,7 +61,7 @@ function getFieldNameParticipan($type, $where="", $campoExtra1="", $where2="" ){
 		
 		
 			
-	//echo "!!!! ".$qryParticipantes; die();		
+	// echo "!!!! ".$qryParticipantes; die();		
 		// apertura de BD
 		$reg_data=0;
 		//$db = new SQLite3('db/database.db3');
@@ -105,11 +105,11 @@ function getFieldNameParticipan($type, $where="", $campoExtra1="", $where2="" ){
 				}
 				$coma = ", ";
 		}
-		
+		$where2 = "  and tipo_casilla LIKE 'M%'";
 		$participanSQL =  "Select ".$campoCorte.$participanSQL.", sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total from scd_votos ".$where.$where2;
 	
 	
-//	echo $participanSQL; die();
+	// echo $participanSQL; die();
 	/*	
 		$participanSQL =  "Select ".$campoCorte.$participanSQL.", votos_cand_no_reg as [Candidatos no registrados], votos_nulos as [Votos nulos], votacion_total as [Votación total] from scd_votos ".$where.$where2;
 	*/	
