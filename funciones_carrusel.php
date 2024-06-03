@@ -38,22 +38,21 @@ function getFieldNameParticipan($type, $where="", $campoExtra1="", $where2="" ){
 		
 		switch ($type) {
 			case 1:
-				$qryParticipantes = 'select DISTINCT JG.id_participante, P.siglas, P.descripcion from scd_participantes_jgob JG
+				$qryParticipantes = 'select DISTINCT JG.id_participante, P.siglas, P.descripcion from scd_candidatos_jgob JG
 				left join scd_cat_participantes P
 				on JG.id_participante = P.id_participante '.
 				' order by JG.prelacion;';
 				break;
 			case 2:
-				$qryParticipantes = 'select DISTINCT '.$campoExtra1.' MR.id_participante, 	P.siglas, P.descripcion from scd_participantes_mr MR
+				$qryParticipantes = 'select DISTINCT '.$campoExtra1.' MR.id_participante, 	P.siglas, P.descripcion from scd_candidatos_mr MR
 				left join scd_cat_participantes P
-				on MR.id_participante = P.id_participante '.$where.
-				' order by MR.prelacion, '.$campoExtra1.' MR.prelacion';
+				on MR.id_participante = P.id_participante where id_distrito=1 order by MR.prelacion, '.$campoExtra1.' MR.prelacion';
 				break;
 			case 3:  //RP
 				$qryParticipantes = '';
 				break;
 			case 4:
-					$qryParticipantes = 'select DISTINCT '.$campoExtra1.' JD.id_participante, P.siglas, P.descripcion from scd_participantes_jdel JD
+					$qryParticipantes = 'select DISTINCT '.$campoExtra1.' JD.id_participante, P.siglas, P.descripcion from scd_candidatos_jdel JD
 					left join scd_cat_participantes P
 					on JD.id_participante = P.id_participante '.$where.
 					' order by '.$campoExtra1.' JD.prelacion;';
@@ -62,7 +61,7 @@ function getFieldNameParticipan($type, $where="", $campoExtra1="", $where2="" ){
 		
 		
 			
-////////	echo "!!!! ".$qryParticipantes; return;		
+	//echo "!!!! ".$qryParticipantes; die();		
 		// apertura de BD
 		$reg_data=0;
 		//$db = new SQLite3('db/database.db3');
@@ -85,12 +84,32 @@ function getFieldNameParticipan($type, $where="", $campoExtra1="", $where2="" ){
 		$participanSQL="";
 		// Recorro para armar SQL
 		foreach ($value_records as $clave => $valor) {
-				$participanSQL .= ($coma.' SUM(votos_part_'.$valor["id_participante"].') as votos_part_'.$valor["id_participante"]);
+				if($valor["id_participante"]==10 || $valor["id_participante"]==14){
+					if($valor["id_participante"]==10){
+						$participanSQL .= ($coma.' SUM(total_votos_cc1) as votos_part_'.$valor["id_participante"]);
+					}
+					else{
+						if($valor["id_participante"]==14){
+							$participanSQL .= ($coma.' SUM(total_votos_cc5) as votos_part_'.$valor["id_participante"]);
+						}
+						else{
+							$participanSQL .= ($coma.' SUM(votos_part_'.$valor["id_participante"].') as votos_part_'.$valor["id_participante"]);
+				
+						}
+						
+					}
+				}
+				else{
+					$participanSQL .= ($coma.' SUM(votos_part_'.$valor["id_participante"].') as votos_part_'.$valor["id_participante"]);
+				
+				}
 				$coma = ", ";
 		}
 		
 		$participanSQL =  "Select ".$campoCorte.$participanSQL.", sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total from scd_votos ".$where.$where2;
 	
+	
+//	echo $participanSQL; die();
 	/*	
 		$participanSQL =  "Select ".$campoCorte.$participanSQL.", votos_cand_no_reg as [Candidatos no registrados], votos_nulos as [Votos nulos], votacion_total as [Votación total] from scd_votos ".$where.$where2;
 	*/	
@@ -288,7 +307,7 @@ try {
 		
 		//" group by ".$name_item;
 		
-//		echo $qryParticipantes; 
+//	echo $qryParticipantes ; die();
 //		return;	
 
 		$records = getRecordsetCarrousel($qryParticipantes);

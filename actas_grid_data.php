@@ -213,19 +213,16 @@ try {
 		}
 		
 		
-		$qryData = "SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito ".$participan.", votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, contabilizar, V.validado ,'.$nombre_campo_acta.', '.$md5_campo_acta.
-		', '' as ue_identificador_comprobante, '' as ue_circunscripcion_federal, '' AS ue_id_casilla, '' AS ue_tipo_casilla, '' AS ue_id_ext_contigua, '' AS ue_tipo_documento,
-		'' AS ue_personas_votaron, '' AS ue_identificacion, '' AS ue_votos_partidos, '' AS ue_version_software, '' AS ue_fecha_impresion,
-		'' AS ue_codigo_integridad, '' AS ue_qr,
-		'' as observaciones	
+		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito '.$participan.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, contabilizar, V.validado ,'.$nombre_campo_acta.', '.$md5_campo_acta.
+		', "" as ue_identificador_comprobante, "" AS ue_circunscripcion_federal, "" AS ue_id_casilla, "" AS ue_tipo_casilla, "" AS ue_id_ext_contigua, "" AS ue_tipo_documento, "" AS ue_personas_votaron, "" AS ue_identificacion, "" AS ue_votos_partidos, "" AS ue_version_software, "" AS ue_fecha_impresion, "" AS ue_codigo_integridad, "" AS ue_qr,
+		"" as "observaciones"		
 		FROM scd_votos V 
 		left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
 		left join dig_actas_prep D 
 		on  V.id_distrito = D.id_distrito  and  V.clave_mdc = D.acta  
-		where V.validado ='T' and V.contabilizar='T' and V.id_tipo_eleccion= $type";
-		// where V.validado ="T" and V.contabilizar="T" and V.id_tipo_eleccion= '.$type;
+		where V.validado ="T" and V.id_tipo_eleccion= '.$type;
 		
 		if($type>=1){
 			$qryData .= " and ".$name_item.'='.$item;
@@ -258,46 +255,48 @@ try {
 		while ($row = $res_catch->fetchArray(SQLITE3_ASSOC))
 		{
 			array_push($itemRecords["data"], $row);
-			
-			//$participacion =  intval($row["votacion_total"])*100 / intval($row["lista_nominal"]);
-			if(intval($row["lista_nominal"]>0)){
-				$participacion =  number_format(intval($row["votacion_total"])*100 / intval($row["lista_nominal"]), 4, '.', ',');
-			}
-			else{
-				$participacion = 0;
-			}
-			
-			// Obtener el primer caracter
-			$primerCaracter = substr($row["tipo_casilla"], 0, 1);
-			if($primerCaracter=='B') $primerCaracter='Básica';
-			if($primerCaracter=='C') $primerCaracter='Contigua';
-			if($primerCaracter=='A') $primerCaracter='Voto en el extranjero';
-			
-			// Obtener el resto de la cadena
-			$restoCadena = substr($row["tipo_casilla"], 1);
-			
-			$participa = array(
-						"id_delegacion" => $row["id_delegacion"],
-						"id_distrito" => $row["id_seccion"],
-						"id_seccion" => $row["id_distrito"],
-						"tipo_casilla" => $row["tipo_casilla"],
-						////// "num_casilla"=> str_pad($restoCadena , 4, "0", STR_PAD_LEFT),
-						"num_casilla"=> $restoCadena,
-						"caracter_cas" => $primerCaracter,
-						"total_votaron"=> $row["total_votaron"],
-						"lista_nominal" => $row["lista_nominal"],
-						"participacion" => $participacion,
-						"votacion_total" => $row["votacion_total"]
-			);
-			
-			// SUMATORIAS PARA RESUMEN
-			$acumulado += (intVal($row["votacion_total"]) - intVal($row["votos_cand_no_reg"]) - intVal($row["votos_nulos"]));
-			$no_reg += intVal($row["votos_cand_no_reg"]); 
-			$nulo +=  intVal($row["votos_nulos"]); 
-			$total += intVal($row["votacion_total"]);
-			
-			$itemParticipacion[] = $participa;
+				
+				//$participacion =  intval($row["votacion_total"])*100 / intval($row["lista_nominal"]);
+				if(intval($row["lista_nominal"]>0)){
+					$participacion =  number_format(intval($row["votacion_total"])*100 / intval($row["lista_nominal"]), 4, '.', ',');
+				}
+				else{
+					$participacion = 0;
+				}
+				
+				// Obtener el primer caracter
+				$primerCaracter = substr($row["tipo_casilla"], 0, 1);
+				if($primerCaracter=='B') $primerCaracter='Básica';
+				if($primerCaracter=='C') $primerCaracter='Contigua';
+				if($primerCaracter=='A') $primerCaracter='Voto en el extranjero';
+				
+				// Obtener el resto de la cadena
+				$restoCadena = substr($row["tipo_casilla"], 1);
+				
+				$participa = array(
+							"id_delegacion" => $row["id_delegacion"],
+							"id_distrito" => $row["id_seccion"],
+							"id_seccion" => $row["id_distrito"],
+							"tipo_casilla" => $row["tipo_casilla"],
+							////// "num_casilla"=> str_pad($restoCadena , 4, "0", STR_PAD_LEFT),
+							"num_casilla"=> $restoCadena,
+							"caracter_cas" => $primerCaracter,
+							"total_votaron"=> $row["total_votaron"],
+							"lista_nominal" => $row["lista_nominal"],
+							"participacion" => $participacion,
+							"votacion_total" => $row["votacion_total"]
+				);
+				
+				// SUMATORIAS PARA RESUMEN
+				if($row["contabilizar"]=="T"){
+					$acumulado += (intVal($row["votacion_total"]) - intVal($row["votos_cand_no_reg"]) - intVal($row["votos_nulos"]));
+					$no_reg += intVal($row["votos_cand_no_reg"]); 
+					$nulo +=  intVal($row["votos_nulos"]); 
+					$total += intVal($row["votacion_total"]);
+				}
+				$itemParticipacion[] = $participa;
 		}
+	
 		
 		$votos_acumulados_por =0;
 		$candidatos_no_reg_por = 0;

@@ -106,7 +106,7 @@ try {
 				break;
 		}
 		
-	//echo $qryParticipantes; die();
+		//echo $qryParticipantes; die();
 	
 		// apertura de BD
 		$reg_data=0;

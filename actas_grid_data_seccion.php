@@ -205,7 +205,7 @@ try {
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
 		left join dig_actas_prep D 
 		on V.id_delegacion = D.id_delegacion  and V.id_distrito = D.id_distrito  and  V.clave_mdc = D.acta  
-		where V.id_tipo_eleccion= '.$type;
+		where V.id_tipo_eleccion= '.$type.' and contabilizar="T" ' ;
 		if($type>=1){
 			$qryData .= " and ".$name_item.'='.$item;
 		}
@@ -223,7 +223,7 @@ try {
 		$itemRecords["columns"] = $itemNameRecords;
 		
 		
-//echo "<br>LA CONSULTA ".$qryData; return;
+////echo "<br>LA CONSULTA ".$qryData; die();
 		
 		$itemRecords["data"] = array();
 		$itemRecords["participacion"]= array();
@@ -241,7 +241,7 @@ try {
 			
 			//$participacion =  intval($row["votacion_total"])*100 / intval($row["lista_nominal"]);
 			if(intval($row["lista_nominal"]>0)){
-				$participacion =  number_format(intval($row["votacion_total"])*100 / intval($row["lista_nominal"]), 4, '.', ',');
+				$participacion =   number_format($row["votacion_total"]*100 / $row["lista_nominal"], 4, '.', ',');
 			}
 			else{
 				$participacion = 0;
@@ -280,20 +280,28 @@ try {
 			$itemParticipacion[] = $participa;
 		}
 		
-		$votos_acumulados_por ="0%";
-		$candidatos_no_reg_por = "0%";
-		$nulos_por = "0%";
-		$total_por = "0%";
 		
+		if($total>0){
+			$votos_acumulados_por = $acumulado*100 / $total; 
+			$candidatos_no_reg_por = $no_reg*100 / $total;
+			$nulos_por =  $nulo*100 / $total;
+			//$total_por = "0%";
+		}
+		else{
+			$votos_acumulados_por = "0%";
+			$candidatos_no_reg_por = "0%";
+			$nulos_por = "0%";
+			//$total_por = "0%";
+		}
 		// registro de resumen
 		$itemResumen = array(
 			"votos_acumulados" => $acumulado,
 			"candidatos_no_reg" => $no_reg,
 			"nulos" => $nulo,
 			"total" => $total,
-			"votos_acumulados_por" => $votos_acumulados_por,
-			"candidatos_no_reg_por" => $candidatos_no_reg_por,
-			"nulos_por" => $nulos_por,
+			"votos_acumulados_por" => sprintf("%01.4f",$votos_acumulados_por),
+			"candidatos_no_reg_por" => sprintf("%01.4f",$candidatos_no_reg_por),
+			"nulos_por" => sprintf("%01.4f",$nulos_por),
 			"total_por" => "100.0000%",
 		);
 		

@@ -165,8 +165,43 @@ try {
 			$itemRecords["avance_dmr"][0]["actas_capturadas"] += isset($itemRecords["avance_rp"][0]["actas_capturadas"])?$itemRecords["avance_rp"][0]["actas_capturadas"]:0;
 			$itemRecords["avance_dmr"][0]["actas_capturadas_de"] += 44;
 			$itemRecords["avance_dmr"][0]["ln_capturadas"] += isset($itemRecords["avance_rp"][0]["ln_capturadas"])?$itemRecords["avance_rp"][0]["ln_capturadas"]:0;
+			
+			
 		}
-		
+		/*
+		if(isset($itemRecords["resumen_dmr"][0])){
+
+			$itemRecords["resumen_dmr"][0]["votos_acumulados"] += isset($itemRecords["resumen_rp"][0]["votos_acumulados"])?$itemRecords["resumen_rp"][0]["votos_acumulados"]:0;
+			$itemRecords["resumen_dmr"][0]["candidatos_no_reg"] += isset($itemRecords["resumen_rp"][0]["candidatos_no_reg"])?$itemRecords["resumen_rp"][0]["candidatos_no_reg"]:0;
+			$itemRecords["resumen_dmr"][0]["nulos"] += isset($itemRecords["resumen_rp"][0]["nulos"])?$itemRecords["resumen_rp"][0]["nulos"]:0;
+			$itemRecords["resumen_dmr"][0]["total"] += isset($itemRecords["resumen_rp"][0]["total"])?$itemRecords["resumen_rp"][0]["total"]:0;
+			
+			$votos_sin_especiales1 = str_replace(',', '', $itemRecords["resumen_rp"][0]["votos_sin_especiales"]);
+			$votos_sin_especiales2 = str_replace(',', '', $itemRecords["resumen_dmr"][0]["votos_sin_especiales"]);
+			$itemRecords["resumen_dmr"][0]["votos_sin_especiales"] = number_format($votos_sin_especiales1 + $votos_sin_especiales2, 2, '.', ',');
+			
+			$votos_especiales1 = str_replace(',', '', $itemRecords["resumen_rp"][0]["votos_especiales"]);
+			$votos_especiales2 = str_replace(',', '', $itemRecords["resumen_dmr"][0]["votos_especiales"]);
+			$itemRecords["resumen_dmr"][0]["votos_especiales"] = number_format($votos_especiales1 + $votos_especiales2, 2, '.', ',');
+			
+			//$itemRecords["resumen_dmr"][0]["votos_especiales"] += isset($itemRecords["resumen_rp"][0]["votos_especiales"])?$itemRecords["resumen_rp"][0]["votos_especiales"]:0;
+			$itemRecords["resumen_dmr"][0]["suma_esp_s_esp"] += isset($itemRecords["resumen_rp"][0]["suma_esp_s_esp"])?$itemRecords["resumen_rp"][0]["suma_esp_s_esp"]:0;
+			
+			$acumulado = $itemRecords["resumen_dmr"][0]["votos_acumulados"];
+			$total = $itemRecords["resumen_dmr"][0]["total"] ;
+			$votos_acumulados_por = ($acumulado *100) /$total;
+			$itemRecords["resumen_dmr"][0]["votos_acumulados_por"] = sprintf("%01.4f", $votos_acumulados_por)."%";
+			
+			$no_reg = $itemRecords["resumen_dmr"][0]["candidatos_no_reg"];
+			$candidatos_no_reg_por = ($no_reg *100) /$total;
+			 $itemRecords["resumen_dmr"][0]["candidatos_no_reg_por"] = sprintf("%01.4f", $candidatos_no_reg_por)."%";
+			 
+			 $nulo = $itemRecords["resumen_dmr"][0]["nulos"];
+			 $nulos_por = ($nulo *100) /$total;
+			 $itemRecords["resumen_dmr"][0]["nulos_por"] = sprintf("%01.4f", $nulos_por)."%";
+			 
+		}
+		*/
 		if(isset($itemRecords["capturadas_dmr"][0])){
 			$itemRecords["capturadas_dmr"][0]["actas_capturadas"] += isset($itemRecords["capturadas_rp"][0]["actas_capturadas"])?$itemRecords["capturadas_rp"][0]["actas_capturadas"]:0;
 			
@@ -177,6 +212,10 @@ try {
 		}
 		
 		if(isset($itemRecords["avance_alc"][0])){
+			
+			///////////////////////////////////////////////////////////////////////
+			//////////////////////////////OJOOOOOOOOO!!!!/////////////////////////////////////////
+			/// SI NO QUITAN ACTA DE EXTRANJERO PONER!!!!!
 			$itemRecords["avance_alc"][0]["actas_capturadas_de"] -= 1;
 			
 			if($itemRecords["avance_alc"][0]["actas_capturadas_de"]>0){

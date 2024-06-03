@@ -151,8 +151,8 @@ function LeeVotosPrep(){
 							
 							if($type=="2"){
 								$participan .= (', votos_part_10');
-								$participanSUM .= (', sum (ifnull(votos_part_10,0)+ifnull(votos_part_11,0)+ifnull(votos_part_12,0)+ifnull(votos_part_13,0)) as votos_part_10');
-						
+								//$participanSUM .= (', sum (ifnull(votos_part_10,0)+ifnull(votos_part_11,0)+ifnull(votos_part_12,0)+ifnull(votos_part_13,0)) as votos_part_10');
+								$participanSUM .= (', sum(votos_part_10) as votos_part_10 ');
 							}
 							else{
 								$participan .= (', votos_part_10');
@@ -206,9 +206,6 @@ function LeeVotosPrep(){
 			
 		}
 		
-		
-	//echo "<br>".$participan; return;
-		
 		//echo $participanSUM; return ;
 		// Cargo últimos nombre de columnas
 		
@@ -239,14 +236,7 @@ function LeeVotosPrep(){
 			$itemNameRecords[]= $columna;	
 		}
 		
-		/*
-		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito '.$participanSUM.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, votacion_total  
-		FROM scd_votos V 
-		left join scd_casillas C 
-		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
-		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
-		where V.id_tipo_eleccion= '.$type.' limit 4;';
-		*/
+
 		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito '.$participanSUM.', sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total, sum(boletas_sob) as boletas_sob, sum(ciudadanos_votaron) as ciudadanos_votaron, sum(representantes_votaron) as representantes_votaron, sum(total_votaron) as total_votaron, sum(C.lista_nominal) as lista_nominal  
 		FROM scd_votos V 
 		left join scd_casillas C 
@@ -254,14 +244,12 @@ function LeeVotosPrep(){
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
 		where validado	="T" and contabilizar="T"  and V.id_tipo_eleccion= '.$type;
 		
-		if($type>=1){
-			// $qryData .= " and ".$name_item.'='.$item;
-		}
-		
+	
 		
 		if($item_2!=""){
 			$qryData .= " and V.id_seccion = ".$item_2;
 		}
+		
 		if($item_3!=""){
 			$qryData .= " and V.tipo_casilla = '".$item_3."';";
 		}
@@ -271,6 +259,134 @@ function LeeVotosPrep(){
 		}
 		
 		$qryData .= "  limit 4;";
+		
+		
+		if($type==2){
+			$qryData = "
+    WITH suma_votos AS (
+    SELECT V.id_distrito as 'id_distrito',
+         0 as 'votos_part_1', 
+         0 as 'votos_part_2', 
+         0 as 'votos_part_3', 
+         0 as 'votos_part_4',
+         0 as 'votos_part_5',
+         sum(V.votos_part_6) as 'votos_part_6', 
+         0 as 'votos_part_7',  
+         sum(V.votos_part_8) as 'votos_part_8', 
+         sum(V.votos_part_9) as 'votos_part_9',
+         sum(V.total_votos_cc1) as 'votos_part_10', 
+         sum(V.total_votos_cc5) as 'votos_part_14',
+         sum(votos_cand_no_reg) as 'votos_cand_no_reg', 
+         sum(votos_nulos) as 'votos_nulos', 
+         sum(votacion_total) as 'votacion_total',
+          sum(C.lista_nominal) as 'lista_nominal'
+    FROM scd_votos as V
+    left join scd_casillas C 
+		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
+		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
+    where  V.id_distrito in (0,1,2,3,4,5,6,8,9,10,11,15,16,18,19,22,23,24,27,28,32,33) and V.id_tipo_eleccion in (2) 
+    and V.validado='T' and V.contabilizar='T' group by V.id_distrito
+    UNION ALL
+    SELECT V.id_distrito as 'id_distrito',
+         0 as 'votos_part_1', 
+         0 as 'votos_part_2', 
+         0 as 'votos_part_3', 
+         sum(V.votos_part_4) as 'votos_part_4',
+         sum(V.votos_part_5)  as 'votos_part_5',
+         sum(V.votos_part_6) as 'votos_part_6', 
+         sum(V.votos_part_7) as 'votos_part_7',  
+         sum(V.votos_part_8) as 'votos_part_8', 
+         sum(V.votos_part_9) as 'votos_part_9',
+         sum(V.total_votos_cc1) as 'votos_part_10', 
+         0 as 'votos_part_14',
+         sum(votos_cand_no_reg) as 'votos_cand_no_reg', 
+         sum(votos_nulos) as 'votos_nulos', 
+         sum(votacion_total) as 'votacion_total',
+         sum(C.lista_nominal) as 'lista_nominal'
+    FROM scd_votos as V
+    left join scd_casillas C 
+		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
+		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
+    where  V.id_distrito in (7,14,29,31) and V.id_tipo_eleccion in (2) and 
+           V.validado='T' and V.contabilizar='T' group by V.id_distrito
+    UNION ALL
+    SELECT V.id_distrito as 'id_distrito',
+         sum(V.votos_part_1) as 'votos_part_1', 
+         sum(V.votos_part_2) as 'votos_part_2', 
+         sum(V.votos_part_3) as 'votos_part_3', 
+         0 as 'votos_part_4',
+         0  as 'votos_part_5',
+         sum(V.votos_part_6) as 'votos_part_6', 
+         0 as 'votos_part_7',  
+         sum(V.votos_part_8) as 'votos_part_8', 
+         sum(V.votos_part_9) as 'votos_part_9',
+         0 as 'votos_part_10', 
+         sum(V.total_votos_cc5) as 'votos_part_14',
+         sum(votos_cand_no_reg) as 'votos_cand_no_reg', 
+         sum(votos_nulos) as 'votos_nulos', 
+         sum(votacion_total) as 'votacion_total',
+         sum(C.lista_nominal) as 'lista_nominal'
+    FROM scd_votos as V
+        left join scd_casillas C 
+		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
+		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
+    where  V.id_distrito in (12,13,17,20,21,25,26,30) and V.id_tipo_eleccion in (2) and 
+           V.validado='T' and V.contabilizar='T' group by V.id_distrito
+),
+sumatoria as(
+    select sum(votos_part_1) as 'votos_part_1', 
+         sum(votos_part_2) as 'votos_part_2', 
+         sum(votos_part_3) as 'votos_part_3', 
+         sum(votos_part_4) as 'votos_part_4',
+         sum(votos_part_5) as 'votos_part_5',
+         sum(votos_part_6) as 'votos_part_6', 
+         sum(votos_part_7) as 'votos_part_7',  
+         sum(votos_part_8) as 'votos_part_8', 
+         sum(votos_part_9) as 'votos_part_9',
+         sum(votos_part_10) as 'votos_part_10', 
+         sum(votos_part_14) as 'votos_part_14',
+         sum(votos_cand_no_reg) as 'votos_cand_no_reg', 
+         sum(votos_nulos) as 'votos_nulos',
+         sum(votacion_total) as 'votacion_total',
+         sum(lista_nominal) as 'lista_nominal'
+        from suma_votos 
+)
+select votos_part_1 as 'votos_part_1', 
+         votos_part_2 as 'votos_part_2', 
+         votos_part_3 as 'votos_part_3', 
+         votos_part_4 as 'votos_part_4',
+         votos_part_5 as 'votos_part_5',
+         votos_part_6 as 'votos_part_6', 
+         votos_part_7 as 'votos_part_7',  
+         votos_part_8 as 'votos_part_8', 
+         votos_part_9 as 'votos_part_9',
+         votos_part_10 as 'votos_part_10', 
+         votos_part_14 as 'votos_part_14',
+         votos_cand_no_reg as 'votos_cand_no_reg', 
+         votos_nulos as 'votos_nulos',
+         lista_nominal as 'lista_nominal',
+         votacion_total as 'votacion_total'
+        from sumatoria 
+union all
+select   printf('%.4f%%', CAST((votos_part_1*100) as FLOAT)/votacion_total)  as 'votos_part_1', 
+         printf('%.4f%%',CAST((votos_part_2*100) as FLOAT)/votacion_total) as 'votos_part_2', 
+         printf('%.4f%%',CAST((votos_part_3*100) as FLOAT)/votacion_total) as 'votos_part_3', 
+         printf('%.4f%%',CAST((votos_part_4*100) as FLOAT)/votacion_total) as 'votos_part_4',
+         printf('%.4f%%',CAST((votos_part_5*100) as FLOAT)/votacion_total)  as 'votos_part_5',
+         printf('%.4f%%',CAST((votos_part_6*100) as FLOAT)/votacion_total) as 'votos_part_6', 
+         printf('%.4f%%',CAST((votos_part_7*100) as FLOAT)/votacion_total) as 'votos_part_7',  
+         printf('%.4f%%',CAST((votos_part_8*100) as FLOAT)/votacion_total) as 'votos_part_8', 
+         printf('%.4f%%',CAST((votos_part_9*100) as FLOAT)/votacion_total) as 'votos_part_9',
+         printf('%.4f%%',CAST((votos_part_10*100) as FLOAT)/votacion_total) as 'votos_part_10',
+         printf('%.4f%%',CAST((votos_part_14*100) as FLOAT)/votacion_total) as 'votos_part_14',
+         printf('%.4f%%',CAST((votos_cand_no_reg*100) as FLOAT)/votacion_total) as 'votos_cand_no_reg',
+         printf('%.4f%%',CAST((votos_nulos*100) as FLOAT)/votacion_total) as 'votos_nulos',
+         printf('%.4f%%',CAST((votacion_total*100) as FLOAT)/lista_nominal) as 'votos_nulos',
+         sum(votacion_total) as 'votacion_total'
+         from sumatoria 
+
+";
+		}
 					
 		$itemRecords["columns"] = $itemNameRecords;
 		
@@ -300,12 +416,14 @@ function LeeVotosPrep(){
 				$valorCalculo = $valor;
 				
 				if (str_contains2($clave, 'votos_part_') || str_contains2($clave, 'votos_nulos') || str_contains2($clave, 'votos_cand_no_reg') ) {
-					$porcentCalc = 0;
-					if($valorCalculo>0 && $votacion_total>0){
-						//echo "<br>222ENTRE!!!!".$valor."<br>";
-						$porcentCalc = ($valorCalculo*100) / $votacion_total;
+					if($type!=2){
+						$porcentCalc = 0;
+						if($valorCalculo>0 && $votacion_total>0){
+							//echo "<br>222ENTRE!!!!".$valor."<br>";
+							$porcentCalc = ($valorCalculo*100) / $votacion_total;
+						}
+						$registro[$clave] = sprintf("%01.4f", $porcentCalc)." %";
 					}
-					$registro[$clave] = sprintf("%01.4f", $porcentCalc)." %";
 				}
 				// Para buscar las Siglas con el campo llave de "campo_votos"
 				/*$mapeo_name[$valor["campo_votos"]]["siglas"] = $valor["campo_votos"];//$valor["siglas"];
@@ -320,7 +438,10 @@ function LeeVotosPrep(){
 			
 			//array_push($itemRecords["data"], $row);
 			array_push($itemRecords["data"], $row);
-			array_push($itemRecords["data"], $registro);
+			if($type!=2){
+				array_push($itemRecords["data"], $registro);
+			}
+			
 			
 			//$participacion =  intval($row["votacion_total"])*100 / intval($row["lista_nominal"]);
 			if(intval($row["lista_nominal"]>0)){
@@ -331,22 +452,22 @@ function LeeVotosPrep(){
 			}
 			
 			// Obtener el primer caracter
-			$primerCaracter = substr($row["tipo_casilla"], 0, 1);
-			if($primerCaracter=='B') $primerCaracter='Básica';
-			if($primerCaracter=='C') $primerCaracter='Contigua';
-			if($primerCaracter=='A') $primerCaracter='Voto en el extranjero';
+		//	$primerCaracter = substr($row["tipo_casilla"], 0, 1);
+		//	if($primerCaracter=='B') $primerCaracter='Básica';
+		//	if($primerCaracter=='C') $primerCaracter='Contigua';
+		//	if($primerCaracter=='A') $primerCaracter='Voto en el extranjero';
 			
 			// Obtener el resto de la cadena
-			$restoCadena = substr($row["tipo_casilla"], 1);
+			////////////////$restoCadena = substr($row["tipo_casilla"], 1);
 			
 			$participa = array(
-						"id_delegacion" => $row["id_delegacion"],
-						"id_distrito" => $row["id_seccion"],
-						"id_seccion" => $row["id_distrito"],
-						"tipo_casilla" => $row["tipo_casilla"],
-						"num_casilla"=> str_pad($restoCadena , 4, "0", STR_PAD_LEFT),
-						"caracter_cas" => $primerCaracter,
-						"total_votaron"=> $row["total_votaron"],
+						"id_delegacion" => 2, //($row["id_delegacion"],
+						"id_distrito" => 33, //$row["id_seccion"],
+						"id_seccion" => 1, //$row["id_distrito"],
+						"tipo_casilla" => '' , // $row["tipo_casilla"],
+						"num_casilla"=> '', //str_pad($restoCadena , 4, "0", STR_PAD_LEFT),
+						"caracter_cas" => '', //$primerCaracter,
+						"total_votaron"=> 0, //$row["total_votaron"],
 						"lista_nominal" => $row["lista_nominal"],
 						"participacion" => $participacion,
 						"votacion_total" => $row["votacion_total"]

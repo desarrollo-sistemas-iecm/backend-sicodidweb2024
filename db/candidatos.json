@@ -31,15 +31,6 @@
                 "id_participante": "6"
             },
             {
-                "id_ambito": 10,
-                "id_coalicion": 0,
-                "id_partido_politico": 10,
-                "tipo_asociacion": "",
-                "partido_csp": "MC",
-                "nombre_completo": "ESTHER  MEJIA BOLA\u00d1OS",
-                "id_participante": "6"
-            },
-            {
                 "id_ambito": 16,
                 "id_coalicion": 958,
                 "id_partido_politico": 4,
@@ -463,7 +454,7 @@
                 "id_participante": "6"
             }
         ],
-        "fecha_hora_actualizado": "2024-05-27 23:01:30"
+        "fecha_hora_actualizado": "2024-05-31 15:51:38"
     },
     {
         "type": 2,
@@ -1586,6 +1577,6 @@
                 "id_participante": "6"
             }
         ],
-        "fecha_hora_actualizado": "2024-05-27 23:01:13"
+        "fecha_hora_actualizado": "2024-05-31 15:52:11"
     }
 ]

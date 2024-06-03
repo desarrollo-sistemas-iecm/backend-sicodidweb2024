@@ -1637,52 +1637,49 @@ function getAvanceContabilizadaResumen($db, $type = 1){
 		$celTotalLN_CDMX = 0;
 
 
-
 		$sqlEsperadas = "SELECT count(estatus) as cuantos, sum(lista_nominal) as ln FROM scd_casillas where estatus='T'";
-
-
-
 		// Nuevo: 24/Mayo/2021
-
 	    $sumaRP = 0;// 44;
-
-
-
-		
-
 		// apertura de BD
-
 		//$db = new SQLite3('db/database.db3');
-
 		// Contadores:
-
 		$reg_data = 0;
-
 		$reg_cat =0;
-
-		
-
 		$resTMP = $db->query($sqlEsperadas);
-
 		$rowTMP = $resTMP->fetchArray();
+  	    $celTotalEsperadas_F = ($rowTMP["cuantos"] + $sumaRP);
 
-			  $celTotalEsperadas_F = ($rowTMP["cuantos"] + $sumaRP);
-
-			  if($type == 4) {
-				//echo "entra!";
-				$celTotalEsperadas_F = $celTotalEsperadas_F -1;
-			  }
-			  $celTotalLNesperada_F = $rowTMP["ln"];
-
+		 if($type == 4) {
+			//echo "entra!";
+			$celTotalEsperadas_F = $celTotalEsperadas_F -1;
+		  }
+		$celTotalLNesperada_F = $rowTMP["ln"];
 		 unset($rowTMP);
-
 		 unset($resTMP);
 
-		 
+		//------------------------------------------------
+		// NUEVO DESCONTAR LN DE CASILLA M   01/JUNIO/2024
+		//------------------------------------------------
+		$sqlEsperadas = "SELECT count(estatus) as cuantos, sum(lista_nominal) as ln FROM scd_casillas where estatus='T' and substr(tipo_casilla,1,1) = 'M'; ";
+		// Nuevo: 24/Mayo/2021		// apertura de BD
+		//$db = new SQLite3('db/database.db3');
+		// Contadores:
+		$reg_data = 0;
+		$reg_cat =0;
+		$resTMP = $db->query($sqlEsperadas);
+		$rowTMP = $resTMP->fetchArray();
+  	    $ln_extranjero = $rowTMP["ln"];
+
+		 unset($rowTMP);
+		 unset($resTMP);
+		//------------------------------------------------
+		// -----------------------------------FIN NUEVO DESCONTAR LN DE CASILLA M   01/JUNIO/2024
+		//------------------------------------------------
 
 		 //16/04/2024
 
 		// LISTA REAL
+
 
 		$celTotalLN_CDMX = $celTotalLNesperada_F; 
 
@@ -2462,7 +2459,23 @@ function getAvanceContabilizadaResumen($db, $type = 1){
 
 			$celTotalCaptura_F = $row["cuantos"];
 
-			$celTotalLN_F = $celTotalLN_CDMX; //$row["ln"];
+			// LISTA REAL
+			$ln_ext =  $ln_extranjero;
+			switch ($row['id_tipo_eleccion']) {
+				case 1:
+					$ln_ext=0;
+					break;
+				case 2:
+					$ln_ext=0;
+					break;
+				case 3:
+					$ln_ext=0;
+					break;
+
+			}
+			
+			// NUEVO: RESTO SI ES ALCALDIA
+			$celTotalLN_F = $celTotalLN_CDMX - $ln_ext; //$row["ln"];
 
 			$celTotCapLN = $row["ln"];
 

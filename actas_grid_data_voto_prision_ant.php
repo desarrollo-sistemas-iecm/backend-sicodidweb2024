@@ -99,10 +99,11 @@ try {
 				$md5_campo_acta ='md5_img_rp as md5_img';
 				
 				$name_item ="V.id_distrito";
-				$qryParticipantes = 'select DISTINCT MR.id_participante, P.descripcion, P.siglas,
-				MR.tipo_participante  from scd_participantes_mr MR 
+				$qryParticipantes = 'select MR.id_participante, P.descripcion, P.siglas, MR.id_distrito, 
+				MR.tipo_participante, 	MR.prelacion, MR.integrantes   from scd_participantes_mr MR 
 				left join scd_cat_participantes P
-				on MR.id_participante = P.id_participante;';
+				on MR.id_participante = P.id_participante
+				where id_distrito= '.$item.' order by prelacion;';
 				break;
 			case 3:
 				$nombre_campo_acta ='img_nombre_rp as nombre_img';  // 12/Abril/2024
@@ -119,15 +120,17 @@ try {
 				$md5_campo_acta ='md5_img_alc as md5_img';
 				
 				$name_item ="V.id_delegacion";
-				$qryParticipantes = 'select DISTINCT JD.id_participante, P.descripcion, P.siglas,
-				JD.tipo_participante  from scd_participantes_jdel JD 
+				$qryParticipantes = 'select JD.id_participante, P.descripcion, P.siglas, JD.id_delegacion, 
+				JD.tipo_participante, 	JD.prelacion, JD.integrantes   from scd_participantes_jdel JD 
 				left join scd_cat_participantes P
-				on JD.id_participante = P.id_participante;';
+				on JD.id_participante = P.id_participante
+				where id_delegacion= '.$item.' order by prelacion;';
+				break;
 			
 				break;
 		}
 				
-
+////echo $qryParticipantes; return;
 		// apertura de BD
 		$reg_data=0;
 		$db = new SQLite3('db/database.db3');
@@ -153,7 +156,7 @@ try {
 		foreach ($itemRecords["value_fields"] as $clave => $valor) {
 
 // OJO!!! TEMPORAL:
-	if($valor["id_participante"]>11) continue;
+	//if($valor["id_participante"]>11) continue;
 
 				//echo "<br><br>".$clave." - ".$valor["id_participante"]." - ".$valor["descripcion"];
 				$participan .= (', votos_part_'.$valor["id_participante"]);

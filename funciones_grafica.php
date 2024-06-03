@@ -614,6 +614,8 @@ function consigueDatosJG_EXTRANJERO($type, $item){
 
 	}
 	
+	
+
 	return $qryParticipantesITEM;
 
 };
@@ -622,8 +624,6 @@ function consigueDatosJG_EXTRANJERO($type, $item){
 
 function getRecordsetExtranjero_JG($tmpSQL =""){	
 		// apertura de BD
-		// echo $tmpSQL;
-		// exit;
 		$db = new SQLite3('db/database.db3');
 		$res_catch = $db->query($tmpSQL);
 		if(!$res_catch) return null;	
