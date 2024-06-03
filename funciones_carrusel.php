@@ -105,7 +105,7 @@ function getFieldNameParticipan($type, $where="", $campoExtra1="", $where2="" ){
 				}
 				$coma = ", ";
 		}
-		$where2 = "  and tipo_casilla LIKE 'M%'";
+		// $where2 = "  and tipo_casilla LIKE 'M%'";
 		$participanSQL =  "Select ".$campoCorte.$participanSQL.", sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total from scd_votos ".$where.$where2;
 	
 	
