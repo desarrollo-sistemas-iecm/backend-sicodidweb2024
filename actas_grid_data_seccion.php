@@ -47,7 +47,7 @@ try {
 			$nombre_tit = $nombre;
 			if($nombre=='id_delegacion' || $nombre=='tipo_casilla') $nombre_tit ="";
 			if($nombre=='id_seccion') $nombre_tit ="Sección";
-			if($nombre=='id_distrito') $nombre_tit ="Acta digitalizada";
+			if($nombre=='id_distrito') $nombre_tit ="Distrito";
 			$columna = array(
 						"dataIndex" => $nombre,
 						"title" => $nombre_tit,
