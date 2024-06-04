@@ -561,8 +561,8 @@ function getSQLsum($value_records, $type){
 	$tipo_eleccion="";
 
 	if($type==2){
-
-		$tipo_eleccion = " id_tipo_eleccion in(2,3) ";
+		// TODO: Se agrega última condición para evitar que salga el 34 en el listado de diputaciones obtenidas por partido político
+		$tipo_eleccion = " id_tipo_eleccion in(2,3) AND id_distrito <= 33";
 
 	}
 
