@@ -57,7 +57,8 @@ try {
 		
 		//$tmp = ['id_delegacion', 'id_distrito', 'id_seccion', 'tipo_casilla' ];
 		
-		$tmp = [ 'tipo_casilla' ,'id_distrito', 'contabilizar'];
+		$tmp = [ 'tipo_casilla' ,'id_distrito'];
+		// $tmp = [ 'tipo_casilla' ,'id_distrito', 'contabilizar'];
 		$tmpNames = [
 			'votos_cand_no_reg'=>'Candidato no registrado', 
 			'votos_nulos'=>'Votos nulos', 
@@ -81,6 +82,7 @@ try {
 			'ue_version_software'=>'ue_version_software', 
 			'ue_fecha_impresion'=>'ue_fecha_impresion', 
 			'ue_codigo_integridad'=>'ue_codigo_integridad', 
+			'id_distrito'=>'Distrito', 
 			'ue_qr'=>'ue_qr'];
 
 		foreach ($tmp as $nombre) {
@@ -205,7 +207,7 @@ try {
 		$tmpReal = ['Candidato no registrado', 'Votos nulos', 'Votación total', 'Observaciones','ue_identificador_comprobante', 'ue_circunscripcion_federal', 'ue_id_casilla', 'ue_tipo_casilla', 'ue_id_ext_contigua', 'ue_tipo_documento', 'ue_personas_votaron', 'ue_identificacion', 'ue_votos_partidos', 'ue_version_software', 'ue_fecha_impresion', 'ue_codigo_integridad', 'ue_qr'];
 		
 		
-		$tmp = ['votos_cand_no_reg', 'votos_nulos', 'votacion_total', 'observaciones'];
+		$tmp = ['votos_cand_no_reg', 'votos_nulos', 'votacion_total'];
 		
 		$tituloReal ="";
 		
@@ -248,38 +250,8 @@ try {
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
 		where V.id_tipo_eleccion= '.$type.' and C.lista_nominal>0 limit 2;';
 	*/
-		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito, V.clave_mdc '.$participan.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, votacion_total,  V.validado ,
-		CASE 
-        WHEN V.inconsistencia = 1 THEN 
-            CASE 
-                WHEN exede_ln = "T" THEN "EXCEDE LISTA NOMINAL, ALGUN CAMPO ILEGIBLE O SIN DATOS " 
-                ELSE "ALGUN CAMPO ILEGIBLE O SIN DATOS"
-            END
-        WHEN V.inconsistencia = 2 THEN 
-            CASE 
-                WHEN exede_ln = "T" THEN "EXCEDE LISTA NOMINAL, ALGUN CAMPO ILEGIBLE O SIN DATOS " 
-                ELSE "ALGUN CAMPO ILEGIBLE O SIN DATOS"
-            END
-        WHEN V.inconsistencia = 3 THEN "EXCEDE LISTA NOMINAL" 
-        WHEN V.inconsistencia = 4 THEN "SIN ACTA"
-        WHEN V.inconsistencia = 5 THEN "FUERA DE CATALOGO"
-        WHEN V.inconsistencia = 6 THEN 
-            CASE 
-                WHEN exede_ln = "T" THEN "EXCEDE LISTA NOMINAL, TODOS ILEGIBLES O SIN DATO " 
-                ELSE "TODOS ILEGIBLES O SIN DATO"
-            END
-        WHEN V.inconsistencia = 7 THEN 
-            CASE 
-                WHEN exede_ln = "T" THEN "EXCEDE LISTA NOMINAL, TODOS ILEGIBLES O SIN DATO " 
-                ELSE "TODOS ILEGIBLES O SIN DATO"
-            END
-        WHEN V.inconsistencia = 11 THEN "SIN ACTA POR PAQUETE NO ENTREGADO"
-        WHEN V.inconsistencia = 12 THEN "SIN ACTA POR CASILLA NO INSTALADA"
-        WHEN V.inconsistencia = 13 THEN "SIN ACTA POR PAQUETE ENTREGADO SIN BOLSA"
-        WHEN V.inconsistencia = 14 THEN "SIN ACTA POR CONTINGENCIA EN URNA ELECRONICA" 
-        ELSE "--" 
-    END as "observaciones"
-		, contabilizar, '.$nombre_campo_acta.', '.$md5_campo_acta.',  V.ue_identificador_comprobante as ue_identificador_comprobante, V.ue_circunscripcion_federal, ue_id_casilla, V.ue_tipo_casilla, V.ue_id_ext_contigua, V.ue_tipo_documento, V.ue_personas_votaron, V.ue_identificacion, V.ue_votos_partidos, V.ue_version_software, V.ue_fecha_impresion, V.ue_codigo_integridad, V.ue_qr   
+		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito, V.clave_mdc '.$participan.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, votacion_total,  V.validado , "" AS observaciones
+		, contabilizar, '.$nombre_campo_acta.', '.$md5_campo_acta.',  "" as ue_identificador_comprobante, "" AS ue_circunscripcion_federal, "" AS ue_id_casilla, "" AS ue_tipo_casilla, "" AS ue_id_ext_contigua, "" AS ue_tipo_documento, "" AS ue_personas_votaron, "" AS ue_identificacion, "" AS ue_votos_partidos, "" AS ue_version_software, "" AS ue_fecha_impresion, "" AS ue_codigo_integridad, "" AS ue_qr   
 		FROM scd_votos V 
 		left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
@@ -311,7 +283,7 @@ try {
 		// vars para resumen
 		$acumulado=0; $no_reg=0; $nulo =0; $total =0;
 		
-	//	echo $qryData; return;
+		// echo $qryData; return;
 		
 		
 		$res_catch = $db->query($qryData);

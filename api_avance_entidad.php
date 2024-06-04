@@ -215,10 +215,11 @@ try {
 			
 			///////////////////////////////////////////////////////////////////////
 			//////////////////////////////OJOOOOOOOOO!!!!/////////////////////////////////////////
-			/// SI NO QUITAN ACTA DE EXTRANJERO PONER!!!!!
-			$itemRecords["avance_alc"][0]["actas_capturadas_de"] -= 1;
+			/// SI NO QUITAN ACTAS DE EXTRANJERO PONER!!!!!
+			$itemRecords["avance_alc"][0]["actas_capturadas_de"] -= 12;
 			
 			if($itemRecords["avance_alc"][0]["actas_capturadas_de"]>0){
+				$itemRecords["avance_alc"][0]["actas_cap_porcen"] = number_format($itemRecords["avance_alc"][0]["actas_capturadas"]*100/$itemRecords["avance_alc"][0]["actas_capturadas_de"], 4);
 				if($itemRecords["avance_alc"][0]["actas_capturadas"]==$itemRecords["avance_alc"][0]["actas_capturadas_de"]){
 					$itemRecords["avance_alc"][0]["actas_cap_porcen"]="100.0000";
 							

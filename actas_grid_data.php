@@ -172,7 +172,7 @@ try {
 		/*
 		$tmp = ['votos_cand_no_reg', 'votos_nulos', 'votacion_total', 'boletas_sob', 'ciudadanos_votaron', 'representantes_votaron', 'total_votaron', 'lista_nominal'];
 		*/
-		$tmp = ['votos_cand_no_reg', 'votos_nulos', 'votacion_total', 'observaciones'];
+		$tmp = ['votos_cand_no_reg', 'votos_nulos', 'votacion_total'];
 		$tmpNames = [
 			'votos_cand_no_reg'=>'Candidato no registrado', 
 			'votos_nulos'=>'Votos nulos', 
