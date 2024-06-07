@@ -48,7 +48,8 @@ try {
 		foreach ($tmp as $nombre) {
 			$nombre_tit = $nombre;
 			if($nombre=='id_delegacion' || $nombre=='tipo_casilla') $nombre_tit ="";
-			if($nombre=='id_seccion') $nombre_tit ="Casilla";
+			if($nombre=='tipo_casilla') $nombre_tit ="Casilla";
+			if($nombre=='id_seccion') $nombre_tit ="Sección";
 			if($nombre=='id_distrito') $nombre_tit ="Distrito";
 			$columna = array(
 						"dataIndex" => $nombre,

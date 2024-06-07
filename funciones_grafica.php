@@ -155,35 +155,38 @@ function consigueDatosJG($type, $item){
 					suma_igual
 				),
 				distribucion_residuo AS (
-					    SELECT
-        *,
-						votos_part_1 + 
-							CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
-						votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
-						votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
-						votos_part_4 + 
-							CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
-						votos_part_5 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
-						votos_part_7 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
-					FROM
-						mayores
-				)
+   SELECT
+      *,
+      votos_part_1 + 
+         CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
+      votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
+      votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
+      votos_part_4 + 
+         CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
+      votos_part_5 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
+      votos_part_7 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+          CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
+   FROM
+      mayores
+)
+
 				select votos_part_1_S as votos_part_1, votos_part_2_S as votos_part_2, votos_part_3_S as votos_part_3, 
-				votos_part_4_S as votos_part_4, votos_part_5_S as votos_part_5, votos_part_6, votos_part_7_S as votos_part_7,
+				votos_part_4_S +1 as votos_part_4, votos_part_5_S -1 as votos_part_5, votos_part_6, votos_part_7_S as votos_part_7,
 				votos_cand_no_reg, votos_nulos, votacion_total from distribucion_residuo " ;
 	
 		}
@@ -281,35 +284,37 @@ function consigueDatosJG($type, $item){
 						suma_igual
 				),
 				distribucion_residuo AS (
-					SELECT
-						*,
-						votos_part_1 + 
-							CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
-						votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
-						votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
-						votos_part_4 + 
-							CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
-						votos_part_5 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
-						votos_part_7 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
-					FROM
-						mayores
-				)
+   SELECT
+      *,
+      votos_part_1 + 
+         CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
+      votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
+      votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
+      votos_part_4 + 
+         CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
+      votos_part_5 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
+      votos_part_7 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+          CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
+   FROM
+      mayores
+)
 				select sum(votos_part_1_S) as sumvotos_part_1, sum(votos_part_2_S) as votos_part_2, sum(votos_part_3_S) as votos_part_3, 
-				sum(votos_part_4_S) as votos_part_4, sum(votos_part_5_S) as votos_part_5, sum(votos_part_6) as votos_part_6, 
+				sum(votos_part_4_S)+1 as votos_part_4 , sum(votos_part_5_S)-1 as votos_part_5, sum(votos_part_6) as votos_part_6, 
 				sum(votos_part_7_S) as votos_part_7, 
 				 sum(votos_cand_no_reg) as votos_cand_no_reg, sum(votos_nulos) as votos_nulos, sum(votacion_total) as votacion_total
 				 from distribucion_residuo  " ;
@@ -453,33 +458,38 @@ function consigueDatosJG_EXTRANJERO($type, $item){
 					suma_igual
 				),
 				distribucion_residuo AS (
-					    SELECT
-        *,
-						votos_part_1 + 
-							CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
-						votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
-						votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
-						votos_part_4 + 
-							CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
-						votos_part_5 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
-						votos_part_7 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
-					FROM
-						mayores
-				)
+   SELECT
+      *,
+      votos_part_1 + 
+         CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
+      votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
+      votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
+      votos_part_4 + 
+         CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
+         CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
+      votos_part_5 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
+          CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_5') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
+      votos_part_7 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+          CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
+   FROM
+      mayores
+)
+
 				select votos_part_1_S as votos_part_1, votos_part_2_S as votos_part_2, votos_part_3_S as votos_part_3, 
 				votos_part_4_S as votos_part_4, votos_part_5_S as votos_part_5, votos_part_6, votos_part_7_S as votos_part_7, votos_part_8, votos_part_9,
 				votos_cand_no_reg, votos_nulos, votacion_total from distribucion_residuo " ;
@@ -579,33 +589,38 @@ function consigueDatosJG_EXTRANJERO($type, $item){
 						suma_igual
 				),
 				distribucion_residuo AS (
-					SELECT
-						*,
-						votos_part_1 + 
-							CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
-						votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
-							CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
-						votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
-							CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
-							CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
-						votos_part_4 + 
-							CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
-						votos_part_5 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
-							CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
-						votos_part_7 + CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
-							CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
-							CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
-					FROM
-						mayores
-				)
+   SELECT
+      *,
+      votos_part_1 + 
+         CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN residuo10=1 AND (mayor10_1 = 'votos_part_1' OR mayor10_2 = 'votos_part_1') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_1' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_1' THEN residuo12 ELSE 0 END AS votos_part_1_S,
+      votos_part_2 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_2' OR mayor10_2 = 'votos_part_2') THEN  1 ELSE 0 END +
+         CASE WHEN mayor11 = 'votos_part_2' THEN residuo11 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_2' THEN residuo13 ELSE 0 END AS votos_part_2_S,
+      votos_part_3 + CASE WHEN residuo10=2 AND (mayor10_1 = 'votos_part_3' OR mayor10_2 = 'votos_part_3') THEN  1 ELSE 0 END +
+         CASE WHEN mayor12 = 'votos_part_3' THEN  residuo12 ELSE 0 END +
+         CASE WHEN mayor13 = 'votos_part_3' THEN residuo13 ELSE 0 END AS votos_part_3_S,
+      votos_part_4 + 
+         CASE WHEN residuo14 = 2 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
+         CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_4' OR mayor14_2 = 'votos_part_4') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_4' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_4' THEN residuo16 ELSE 0 END AS votos_part_4_S,
+      votos_part_5 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
+          CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_5' OR mayor14_2 = 'votos_part_5') THEN  1 ELSE 0 END +
+         CASE WHEN mayor15 = 'votos_part_5' THEN residuo15 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_5' THEN residuo17 ELSE 0 END AS votos_part_5_S,
+      votos_part_7 + 
+          CASE WHEN residuo14=2 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+          CASE WHEN residuo14 = 1 AND (mayor14_1 = 'votos_part_7' OR mayor14_2 = 'votos_part_7') THEN  1 ELSE 0 END +
+         CASE WHEN mayor16 = 'votos_part_7' THEN  residuo16 ELSE 0 END +
+         CASE WHEN mayor17 = 'votos_part_7' THEN residuo17 ELSE 0 END AS votos_part_7_S
+   FROM
+      mayores
+)
+
 				select sum(votos_part_1_S) as sumvotos_part_1, sum(votos_part_2_S) as votos_part_2, sum(votos_part_3_S) as votos_part_3, 
 				sum(votos_part_4_S) as votos_part_4, sum(votos_part_5_S) as votos_part_5, sum(votos_part_6) as votos_part_6, 
 				sum(votos_part_7_S) as votos_part_7, sum(votos_part_8) as votos_part_8, sum(votos_part_9) as votos_part_9,

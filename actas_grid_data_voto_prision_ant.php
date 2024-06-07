@@ -57,7 +57,8 @@ try {
 		
 		//$tmp = ['id_delegacion', 'id_distrito', 'id_seccion', 'tipo_casilla' ];
 		
-		$tmp = [ 'tipo_casilla' ,'id_distrito'];		
+		$tmp = [ 'tipo_casilla' ,'id_distrito'];
+		
 		foreach ($tmp as $nombre) {
 			$nombre_tit = $nombre;
 
@@ -98,22 +99,29 @@ try {
 				$md5_campo_acta ='md5_img_rp as md5_img';
 				
 				$name_item ="V.id_distrito";
-				// $qryParticipantes = 'select MR.id_participante, P.descripcion, P.siglas, MR.id_distrito, 
-				// MR.tipo_participante, 	MR.prelacion, MR.integrantes   from scd_participantes_mr MR 
-				// left join scd_cat_participantes P
-				// on MR.id_participante = P.id_participante
-				// where id_distrito= '.$item.' order by prelacion;';
-				$qryParticipantes = 'select MR.id_participante, P.descripcion, P.siglas, MR.id_distrito, 
-				MR.tipo_participante, 	MR.prelacion, MR.integrantes   from scd_participantes_mr MR 
-				left join scd_cat_participantes P
-				on MR.id_participante = P.id_participante
-				where id_distrito= 1 order by prelacion;';
+				
+				if($item=='' || $item<=0){
+					$qryParticipantes = 'select MR.id_participante, P.descripcion, P.siglas,
+					MR.tipo_participante, MR.prelacion, MR.integrantes from scd_participantes_jgob MR
+					left join scd_cat_participantes P
+					on MR.id_participante = P.id_participante';
+				}
+				else
+				{
+					$qryParticipantes = 'select MR.id_participante, P.descripcion, P.siglas, MR.id_distrito, 
+					MR.tipo_participante, 	MR.prelacion, MR.integrantes   from scd_participantes_mr MR 
+					left join scd_cat_participantes P
+					on MR.id_participante = P.id_participante
+					where id_distrito= '.$item.' order by prelacion;';
+				}
+				
 				break;
 			case 3:
 				$nombre_campo_acta ='img_nombre_rp as nombre_img';  // 12/Abril/2024
 				$md5_campo_acta ='md5_img_dmr as md5_img';
 				
 				$name_item ="V.id_distrito";
+				
 				$qryParticipantes = 'select DISTINCT RP.id_participante, P.descripcion, P.siglas, 
 				RP.tipo_participante   from scd_participantes_rp RP 
 				left join scd_cat_participantes P
@@ -124,11 +132,21 @@ try {
 				$md5_campo_acta ='md5_img_alc as md5_img';
 				
 				$name_item ="V.id_delegacion";
-				$qryParticipantes = 'select JD.id_participante, P.descripcion, P.siglas, JD.id_delegacion, 
-				JD.tipo_participante, 	JD.prelacion, JD.integrantes   from scd_participantes_jdel JD 
-				left join scd_cat_participantes P
-				on JD.id_participante = P.id_participante
-				where id_delegacion= '.$item.' order by prelacion;';
+				if($item=='' || $item<=0){
+					$qryParticipantes = 'select JD.id_participante, P.descripcion, P.siglas, JD.id_delegacion, 
+					JD.tipo_participante, 	JD.prelacion, JD.integrantes   from scd_participantes_jdel JD 
+					left join scd_cat_participantes P
+					on JD.id_participante = P.id_participante
+					where id_delegacion>=0 order by prelacion;';
+				}
+				else{
+					$qryParticipantes = 'select JD.id_participante, P.descripcion, P.siglas, JD.id_delegacion, 
+					JD.tipo_participante, 	JD.prelacion, JD.integrantes   from scd_participantes_jdel JD 
+					left join scd_cat_participantes P
+					on JD.id_participante = P.id_participante
+					where id_delegacion= '.$item.' order by prelacion;';
+				}
+				
 				break;
 			
 				break;
@@ -186,7 +204,7 @@ try {
 		
 		//echo $participanSUM; return ;
 		// Cargo últimos nombre de columnas
-		$tmpReal = ['Candidato no registrado', 'Votos nulos', 'Votación total', 'ue_identificador_comprobante', 'ue_circunscripcion_federal', 'ue_id_casilla', 'ue_tipo_casilla', 'ue_id_ext_contigua', 'ue_tipo_documento', 'ue_personas_votaron', 'ue_identificacion', 'ue_votos_partidos', 'ue_version_software', 'ue_fecha_impresion', 'ue_codigo_integridad', 'ue_qr'];
+		$tmpReal = ['Candidato no registrado', 'Votos nulos', 'Votación total', 'Observaciones','ue_identificador_comprobante', 'ue_circunscripcion_federal', 'ue_id_casilla', 'ue_tipo_casilla', 'ue_id_ext_contigua', 'ue_tipo_documento', 'ue_personas_votaron', 'ue_identificacion', 'ue_votos_partidos', 'ue_version_software', 'ue_fecha_impresion', 'ue_codigo_integridad', 'ue_qr'];
 		
 		
 		$tmp = ['votos_cand_no_reg', 'votos_nulos', 'votacion_total'];
@@ -230,13 +248,45 @@ try {
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
 		where V.id_tipo_eleccion= '.$type.' and C.lista_nominal>0 limit 2;';
 	*/
-		$qryData = 'SELECT V.id_delegacion, V.id_seccion, V.tipo_casilla, V.id_distrito, V.clave_mdc '.$participan.', votos_cand_no_reg, votos_nulos, votacion_total, boletas_sob, ciudadanos_votaron, representantes_votaron, total_votaron, C.lista_nominal, votacion_total, 
-         "" As observaciones
-		FROM scd_votos V 
-		left join scd_casillas C 
-		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
-		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
-		where V.id_tipo_eleccion= '.$type.$filtro_tipo_acta ;
+		$qryData = 'SELECT V.id_delegacion,
+		V.id_seccion,
+		V.tipo_casilla,
+		V.id_distrito,
+		V.clave_mdc '.$participan.',
+		votos_cand_no_reg,
+		votos_nulos,
+		votacion_total,
+		boletas_sob,
+		ciudadanos_votaron,
+		representantes_votaron,
+		total_votaron,
+		C.lista_nominal,
+		votacion_total,
+		"" AS observaciones,
+		contabilizar,
+		'.$nombre_campo_acta.',
+		'.$md5_campo_acta.',
+		"" as ue_identificador_comprobante,
+		"" As ue_circunscripcion_federal,
+		"" AS ue_id_casilla,
+		"" AS ue_tipo_casilla,
+		"" AS  ue_id_ext_contigua,
+		"" AS  ue_tipo_documento,
+		"" AS  ue_personas_votaron,
+		"" AS  ue_identificacion,
+		"" AS  ue_votos_partidos,
+		"" AS  ue_version_software,
+		"" AS  ue_fecha_impresion,
+		"" AS  ue_codigo_integridad,
+		"" AS  ue_qr
+	FROM scd_votos V
+		left join scd_casillas C on V.id_distrito = C.id_distrito
+		and V.id_delegacion = C.id_delegacion
+		and V.id_seccion = C.id_seccion
+		and V.tipo_casilla = C.tipo_casilla
+		left join dig_actas_prep D on V.id_distrito = D.id_distrito
+		and V.clave_mdc = D.acta
+	where V.id_tipo_eleccion = '.$type.$filtro_tipo_acta .' ORDER BY CAST(SUBSTR(V.tipo_casilla, 2) AS INTEGER) ASC;';
 		
 		if($item!=""){
 			$qryData .= " and ".$name_item.'='.$item;
@@ -253,7 +303,7 @@ try {
 					
 		$itemRecords["columns"] = $itemNameRecords;
 		
-// echo "<br>".$qryData; return;
+//echo "<br>".$qryData; return;
 		
 		$itemRecords["data"] = array();
 		$itemRecords["participacion"]= array();
@@ -261,7 +311,7 @@ try {
 		// vars para resumen
 		$acumulado=0; $no_reg=0; $nulo =0; $total =0;
 		
-		// echo $qryData; return; 	 
+		// echo $qryData; return;
 		
 		
 		$res_catch = $db->query($qryData);

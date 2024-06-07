@@ -1,6 +1,8 @@
  <?php
-// Cabecera para evitar CORS
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+// Cabecera para evitar CORS  version ultimo ine 22-mayo-24
+//boletas extraidas - total asentados 24mayo24
+// solo  me traigo valdidas - 26 de mayo 24
+//error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
@@ -30,154 +32,279 @@ try {
 	function consigueFranjaALC($db){
 		
 			// Lamamos catálogo de porcentajes
-			$sqlCatPor = "SELECT '09' || printf('%04d', P.id_seccion) || substr(P.tipo_casilla, 1, 3) || '00' as CLAVE_CASILLA, '09' || printf('%04d', P.id_seccion) || substr(P.tipo_casilla, 1, 3) || '00' || P.tipo_casilla as CLAVE_ACTA, '09' as ID_ENTIDAD, 'CIUDAD DE MÉXICO' as ENTIDAD, printf('%03d', P.id_delegacion) as ID_ALCALDIA,
-            CASE WHEN P.id_delegacion=2 THEN 'AZCAPOTZALCO'
-                 WHEN P.id_delegacion=3 THEN 'COYOACAN'
-                 WHEN P.id_delegacion=4 THEN 'CUAJIMALPA DE MORELOS'
-                 WHEN P.id_delegacion=5 THEN 'GUSTAVO A MADERO'
-                 WHEN P.id_delegacion=6 THEN 'IZTACALCO'
-                 WHEN P.id_delegacion=7 THEN 'IZTAPALAPA'
-                 WHEN P.id_delegacion=8 THEN 'LA MAGDALENA CONTRERAS'
-                 WHEN P.id_delegacion=9 THEN 'MILPA ALTA'
-                 WHEN P.id_delegacion=10 THEN 'ALVARO OBREGON'
-                 WHEN P.id_delegacion=11 THEN 'TLAHUAC'
-                 WHEN P.id_delegacion=12 THEN 'TLALPAN'
-                 WHEN P.id_delegacion=13 THEN 'XOCHIMILCO'
-                 WHEN P.id_delegacion=14 THEN 'BENITO JUAREZ'
-                 WHEN P.id_delegacion=15 THEN 'CUAUHTEMOC'
-                 WHEN P.id_delegacion=16 THEN 'MIGUEL HIDALGO'
-                 WHEN P.id_delegacion=17 THEN 'VENUSTIANO CARRANZA'
-            ELSE 'N/A'
-            END as ALCALDIA,
-            printf('%04d', P.id_seccion) as SECCION, substr(P.tipo_casilla, 2, 2) as ID_CASILLA,
-            substr(P.tipo_casilla, 1, 1) as TIPO_CASILLA, '00' as EXT_CONTIGUA, '01' as UBICACION_CASILLA,
-            CASE WHEN substr(P.tipo_casilla, 1, 1) = 'S' THEN 'A04E'
-                 WHEN substr(P.tipo_casilla, 1, 1) = 'A' THEN 'A03VA'
-                 WHEN substr(P.tipo_casilla, 1, 1) = 'P' THEN 'A03PPP'
-                 WHEN substr(P.tipo_casilla, 1, 1) = 'U' THEN 'A06UE'
-                 ELSE 'A04'
-            END as TIPO_ACTA, (CASE WHEN P.boletas_sob is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-            wHEN P.boletas_sob is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-            WHEN P.boletas_sob is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-            ELSE P.boletas_sob end) as 'TOTAL_BOLETAS_SOBRANTES', (CASE WHEN P.ciudadanos_votaron is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-            wHEN P.ciudadanos_votaron is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-            WHEN P.ciudadanos_votaron is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-            ELSE P.ciudadanos_votaron end) as 'PERSONAS_VOTARON',  
-            (CASE WHEN P.representantes_votaron is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-            wHEN P.representantes_votaron is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-            WHEN P.representantes_votaron is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-            ELSE P.representantes_votaron end) as 'TOTAL_REP_PARTIDO_CI_VOTARON',
-            (CASE WHEN P.votacion_total is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-            wHEN P.votacion_total is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-            WHEN P.votacion_total is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-            ELSE P.votacion_total end) as 'TOTAL_VOTOS_SACADOS',
-             (CASE WHEN P.votos_part_1 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_1 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_1 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_1 end) as 'PAN',
-             (CASE WHEN P.votos_part_2 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_2 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_2 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_2 end) as 'PRI',
-             (CASE WHEN P.votos_part_3 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_3 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_3 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_3 end) as 'PRD',
-             (CASE WHEN P.votos_part_4 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_4 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_4 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_4 end) as 'PVEM',
-			(CASE WHEN P.votos_part_5 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_5 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_5 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_5 end) as 'PT', 
-            (CASE WHEN P.votos_part_6 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_6 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_6 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_6 end) as 'MC', 
-            (CASE WHEN P.votos_part_7 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_7 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_7 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_7 end) as 'MORENA',
-            (CASE WHEN P.votos_part_9 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_9 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_9 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_9 end) as 'CSP',            
-            (CASE WHEN P.votos_part_14 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_14 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_14 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_14 end)as 'MORENA_PT_PVEM', 
-            (CASE WHEN P.votos_part_10 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_10 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_10 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_10 end) as 'PAN_PRI_PRD', 
-            (CASE WHEN P.votos_part_11 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_11 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_11 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_11 end) as 'PAN_PRI',
-            (CASE WHEN P.votos_part_12 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_12 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_12 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_12 end) as 'PAN_PRD',
-             (CASE WHEN P.votos_part_13 is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-				 wHEN P.votos_part_13 is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-				 WHEN P.votos_part_13 is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-				 ELSE P.votos_part_13 end) as 'PRI_PRD', 
-             (CASE WHEN P.votos_cand_no_reg is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-                WHEN P.votos_cand_no_reg is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' WHEN P.votos_cand_no_reg is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE '
-                ELSE P.votos_cand_no_reg end) as 'NO_REGISTRADAS',    
-             (CASE WHEN P.votos_nulos is null and P.inconsistencia in (6,7) THEN 'SIN DATO' 
-                WHEN P.votos_nulos is null and P.inconsistencia in (4,11,12,13,14) THEN 'SIN ACTA' 
-                WHEN P.votos_nulos is null and P.inconsistencia in (1,2) THEN 'ILEGIBLE' ELSE P.votos_nulos end) as 'NULOS',
-            P.boletas_sob as 'TOTAL_VOTOS_ASENTADOS', P.votacion_total as 'TOTAL_VOTOS_CALCULADOS', 
-             C.lista_nominal as 'LISTA_NOMINAL', P.representantes_votaron as 'REPRESENTANTES_PP_CI', 
-             CASE WHEN P.inconsistencia = 1 THEN CASE WHEN P.exede_ln = 'T' THEN 'EXCEDE LISTA NOMINAL'
-             ELSE 'ALGUN CAMPO ILEGIBLE O SIN DATOS' END  
-             WHEN P.inconsistencia = 2 THEN CASE  WHEN P.exede_ln = 'T' THEN 'EXCEDE LISTA NOMINAL'
-             ELSE 'ALGUN CAMPO ILEGIBLE O SIN DATOS'  END
-             WHEN P.inconsistencia = 3 THEN 'EXCEDE LISTA NOMINAL'
-             WHEN P.inconsistencia = 4 THEN 'SIN ACTA'
-             WHEN P.inconsistencia = 5 THEN 'FUERA DE CATALOGO'
-             WHEN P.inconsistencia = 6 THEN CASE WHEN P.exede_ln = 'T' THEN 'EXCEDE LISTA NOMINAL, TODOS ILEGIBLES O SIN DATO'
-             ELSE 'TODOS ILEGIBLES O SIN DATO' END 
-             WHEN P.inconsistencia = 7 THEN CASE WHEN P.exede_ln = 'T' THEN 'EXCEDE LISTA NOMINAL, TODOS ILEGIBLES O SIN DATO' ELSE 'TODOS ILEGIBLES O SIN DATO' END 
-             WHEN P.inconsistencia = 11 THEN 'SIN ACTA POR PAQUETE NO ENTREGADO'
-             WHEN P.inconsistencia = 12 THEN 'SIN ACTA POR CASILLA NO INSTALADA'
-             WHEN P.inconsistencia = 13 THEN 'SIN ACTA POR PAQUETE ENTREGADO SIN BOLSA'
-             WHEN P.inconsistencia = 14 THEN 'SIN ACTA POR CONTINGENCIA EN URNA ELECTRONICA'
-            ELSE '--' END as 'OBSERVACIONES',
-        CASE WHEN P.contabilizar = 'T' THEN '1'  ELSE '0' END as 'CONTABILIZADAS', 'F' as 'MECANISMO_TRASLADO', 
-        CASE WHEN A.md5_img_alc IS NULL THEN 'N/A' ELSE A.md5_img_alc END as 'CODIGO_INTEGRIDAD',
-    strftime('%d/%m/%Y %H:%M:%S', datetime(A.fechaRecepcion)) || ' (UTC-6)' AS FECHA_HORA_ACOPIO, strftime('%d/%m/%Y %H:%M:%S', datetime(P.fecha_alta)) || ' (UTC-6)' AS FECHA_HORA_CAPTURA, 
-    strftime('%d/%m/%Y %H:%M:%S', datetime(P.fecha_modif)) || ' (UTC-6)' AS fECHA_HORA_VERIFICACION,
-        CASE WHEN P.capturado_por=1 THEN 'CATD' 
-        WHEN P.capturado_por=2 THEN 'CATD'
-        WHEN P.capturado_por=3 THEN 'CASILLA'
-        WHEN P.capturado_por=4 THEN 'CASILLA'
-        ELSE 'N/A'	END as ORIGEN,
-        CASE WHEN P.capturado_por=1 THEN case when substr(P.tipo_casilla, 1, 1) = 'S' THEN 'MOVIL' ELSE 'ESCANER' END
-         WHEN P.capturado_por=2 THEN 'ESCANER' WHEN P.capturado_por=3 THEN 'MOVIL'
-         WHEN P.capturado_por=4 THEN 'MOVIL' ELSE 'N/A' END as DIGITALIZACION,
-      CASE WHEN substr(P.tipo_casilla, 1, 1) = 'S' THEN 'ACTA UE' ELSE 'ACTA PREP'
-				 END as 'TIPO_DOCUMENTO'
-                FROM scd_casillas as C
-                 left join scd_votos P 
-                 on P.id_distrito = C.id_distrito 
-                 and P.id_delegacion = C.id_delegacion 
-                 and P.id_seccion = C.id_seccion 
-                 and P.tipo_casilla = C.tipo_casilla
-                 LEFT JOIN dig_actas_prep as A
-                 on P.clave_mdc = A.acta
-                WHERE id_tipo_eleccion = 4";
+			$sqlCatPor = "SELECT 
+      printf('%03d', P.id_delegacion) as ID_ALCALDIA,
+      CASE
+          WHEN P.id_delegacion = 2 THEN 'AZCAPOTZALCO'
+          WHEN P.id_delegacion = 3 THEN 'COYOACAN'
+          WHEN P.id_delegacion = 4 THEN 'CUAJIMALPA DE MORELOS'
+          WHEN P.id_delegacion = 5 THEN 'GUSTAVO A MADERO'
+          WHEN P.id_delegacion = 6 THEN 'IZTACALCO'
+          WHEN P.id_delegacion = 7 THEN 'IZTAPALAPA'
+          WHEN P.id_delegacion = 8 THEN 'LA MAGDALENA CONTRERAS'
+          WHEN P.id_delegacion = 9 THEN 'MILPA ALTA'
+          WHEN P.id_delegacion = 10 THEN 'ALVARO OBREGON'
+          WHEN P.id_delegacion = 11 THEN 'TLAHUAC'
+          WHEN P.id_delegacion = 12 THEN 'TLALPAN'
+          WHEN P.id_delegacion = 13 THEN 'XOCHIMILCO'
+          WHEN P.id_delegacion = 14 THEN 'BENITO JUAREZ'
+          WHEN P.id_delegacion = 15 THEN 'CUAUHTEMOC'
+          WHEN P.id_delegacion = 16 THEN 'MIGUEL HIDALGO'
+          WHEN P.id_delegacion = 17 THEN 'VENUSTIANO CARRANZA'
+          ELSE 'N/A'
+      END as ALCALDIA,
+      CASE
+          WHEN P.tipo_casilla = 'A1'
+          or P.tipo_casilla = 'A2'
+          or P.tipo_casilla = 'A3' THEN 'N/A'
+          ELSE printf('%04d', P.id_seccion)
+      END AS SECCION,
+      CASE
+          WHEN P.tipo_casilla = 'A1'
+          or P.tipo_casilla = 'A2'
+          or P.tipo_casilla = 'A3' THEN 'N/A'
+          ELSE substr(P.tipo_casilla, 2, 2)
+      END as ID_CASILLA,
+      substr(P.tipo_casilla, 1, 1) as TIPO_CASILLA,
+      '00' as EXT_CONTIGUA,
+      '01' as UBICACION_CASILLA,
+      CASE
+          WHEN substr(P.tipo_casilla, 1, 1) = 'S' THEN 'A04E'
+          WHEN substr(P.tipo_casilla, 1, 1) = 'A' THEN 'A03VA'
+          WHEN substr(P.tipo_casilla, 1, 1) = 'P' THEN 'A03PPP'
+          WHEN substr(P.tipo_casilla, 1, 1) = 'U' THEN 'A06UE'
+          ELSE 'A04'
+      END as TIPO_ACTA,
+      (
+          CASE
+              WHEN P.boletas_sob is null
+               THEN 'SIN DATO'
+              WHEN P.boletas_sob is null
+               THEN 'SIN ACTA'
+              WHEN P.boletas_sob is null
+               THEN 'ILEGIBLE '
+              ELSE P.boletas_sob
+          end
+      ) as 'TOTAL_BOLETAS_SOBRANTES',
+      (
+          CASE
+              WHEN P.ciudadanos_votaron is null
+               THEN 'SIN DATO'
+              wHEN P.ciudadanos_votaron is null
+               THEN 'SIN ACTA'
+              WHEN P.ciudadanos_votaron is null
+               THEN 'ILEGIBLE '
+              ELSE P.ciudadanos_votaron
+          end
+      ) as 'PERSONAS_VOTARON',
+      (
+          CASE
+              WHEN P.representantes_votaron is null
+               THEN 'SIN DATO'
+              wHEN P.representantes_votaron is null
+               THEN 'SIN ACTA'
+              WHEN P.representantes_votaron is null
+               THEN 'ILEGIBLE '
+              ELSE P.representantes_votaron
+          end
+      ) as 'TOTAL_REP_PARTIDO_CI_VOTARON',
+      (
+          CASE
+              WHEN P.votacion_total is null
+               THEN 'SIN DATO'
+              wHEN P.votacion_total is null
+               THEN 'SIN ACTA'
+              WHEN P.votacion_total is null
+               THEN 'ILEGIBLE '
+              ELSE P.votacion_total
+          end
+      ) as 'TOTAL_VOTOS_SACADOS',
+      (
+          CASE
+              WHEN P.votos_part_1 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_1 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_1 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_1
+          end
+      ) as 'PAN',
+      (
+          CASE
+              WHEN P.votos_part_2 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_2 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_2 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_2
+          end
+      ) as 'PRI',
+      (
+          CASE
+              WHEN P.votos_part_3 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_3 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_3 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_3
+          end
+      ) as 'PRD',
+      (
+          CASE
+              WHEN P.votos_part_4 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_4 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_4 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_4
+          end
+      ) as 'PVEM',
+      (
+          CASE
+              WHEN P.votos_part_5 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_5 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_5 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_5
+          end
+      ) as 'PT',
+      (
+          CASE
+              WHEN P.votos_part_6 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_6 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_6 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_6
+          end
+      ) as 'MC',
+      (
+          CASE
+              WHEN P.votos_part_7 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_7 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_7 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_7
+          end
+      ) as 'MORENA',
+      (
+          CASE
+              WHEN P.votos_part_9 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_9 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_9 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_9
+          end
+      ) as 'CSP',
+      (
+          CASE
+              WHEN P.votos_part_14 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_14 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_14 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_14
+          end
+      ) as 'MORENA_PT_PVEM',
+      (
+          CASE
+              WHEN P.votos_part_10 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_10 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_10 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_10
+          end
+      ) as 'PAN_PRI_PRD',
+      (
+          CASE
+              WHEN P.votos_part_11 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_11 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_11 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_11
+          end
+      ) as 'PAN_PRI',
+      (
+          CASE
+              WHEN P.votos_part_12 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_12 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_12 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_12
+          end
+      ) as 'PAN_PRD',
+      (
+          CASE
+              WHEN P.votos_part_13 is null
+               THEN 'SIN DATO'
+              wHEN P.votos_part_13 is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_part_13 is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_part_13
+          end
+      ) as 'PRI_PRD',
+      (
+          CASE
+              WHEN P.votos_cand_no_reg is null
+               THEN 'SIN DATO'
+              WHEN P.votos_cand_no_reg is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_cand_no_reg is null
+               THEN 'ILEGIBLE '
+              ELSE P.votos_cand_no_reg
+          end
+      ) as 'NO_REGISTRADAS',
+      (
+          CASE
+              WHEN P.votos_nulos is null
+               THEN 'SIN DATO'
+              WHEN P.votos_nulos is null
+               THEN 'SIN ACTA'
+              WHEN P.votos_nulos is null
+               THEN 'ILEGIBLE'
+              ELSE P.votos_nulos
+          end
+      ) as 'NULOS',
+      P.boletas_extraidas as 'TOTAL_VOTOS_ASENTADOS',
+      P.votacion_total as 'TOTAL_VOTOS_CALCULADOS',
+      C.lista_nominal as 'LISTA_NOMINAL',
+      P.representantes_votaron as 'REPRESENTANTES_PP_CI',
+      strftime('%d/%m/%Y %H:%M:%S', datetime(P.fecha_alta)) || ' (UTC-6)' AS FECHA_HORA_CAPTURA
+  FROM scd_casillas as C
+      left join scd_votos P on P.id_distrito = C.id_distrito
+      and P.id_delegacion = C.id_delegacion
+      and P.id_seccion = C.id_seccion
+      and P.tipo_casilla = C.tipo_casilla
+      LEFT JOIN dig_actas_prep as A on P.clave_mdc = A.acta
+  WHERE id_tipo_eleccion = 4";
 		
 		$itemRecordsTMP = array();
 		$db->enableExceptions(false);
 		$res_catchTMP = $db->query($sqlCatPor);
 		
-
+        
 		while ($row = $res_catchTMP->fetchArray(SQLITE3_ASSOC))
 		{
-			array_push($itemRecordsTMP, $row);
+            array_push($itemRecordsTMP, $row);
 		}
 		
 		//	echo "<br><br>CAT : ".$sqlCatPor."<br><br>";
@@ -212,8 +339,7 @@ try {
 		
 		
 /////////////////////////////////// fecha de corte
-$query3 ="
-SELECT * from corte";
+$query3 ="SELECT * from corte";
 $rows = $db->query($query3);
 
 if($r3 = $rows->fetcharray()){
@@ -245,17 +371,14 @@ foreach ($blanks as $fields) {
 
 ////////////////////////		
 /////////// CAPTURADADS ////////
-$q="
-SELECT  id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nominal) AS ln, 
+$q="SELECT  id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nominal) AS ln, 
         SUM(votos_cand_no_reg) AS votos_cand_no_reg,  SUM(votos_nulos) AS votos_nulos, SUM(votacion_total) AS votacion_total
     FROM scd_votos P
         LEFT JOIN scd_casillas C 
         ON P.id_distrito = C.id_distrito 
         AND P.id_delegacion = C.id_delegacion 
         AND P.id_seccion = C.id_seccion 
-        AND P.tipo_casilla = C.tipo_casilla WHERE id_tipo_eleccion=4
-    GROUP BY 
-        id_tipo_eleccion";
+        AND P.tipo_casilla = C.tipo_casilla WHERE id_tipo_eleccion=4";
 
  $rows = $db->query($q);
 
@@ -271,41 +394,41 @@ SELECT  id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nominal) 
 
 
 ///////////////////////////
-$q ="
-SELECT count(inconsistencia) as actas_fuera_catalogo FROM scd_votos where id_tipo_eleccion=4 and inconsistencia=5";
+/* $q ="SELECT count(inconsistencia) as actas_fuera_catalogo FROM scd_votos where id_tipo_eleccion=4 and inconsistencia=5";
 
         $rows = $db->query($q);
         if($r = $rows->fetchArray())
            {
           $v_fuera_catalogo=$r['actas_fuera_catalogo'];  //actas fuera de catalogo
-        }
+        } */
+        $v_fuera_catalogo=0;  //actas fuera de catalogo
 
 
 
 //////////////// con inconsistencia de tipo 3 6y 7 para el porcentaje de actas con inconsistecia //////////////
 
-$q ="
-SELECT count(inconsistencia) as inconsistencia FROM scd_votos where id_tipo_eleccion=4 and inconsistencia in (1,2,3,4,6,7)";
+/* $q ="SELECT count(inconsistencia) as inconsistencia FROM scd_votos where id_tipo_eleccion=4 and inconsistencia in (1,2,3,6,7)";
 
         $rows = $db->query($q);
         if($r = $rows->fetchArray())
            {
           $v_inconsistencia=$r['inconsistencia'];  //actas fuera de catalogo
-        }
+        } */
+        $v_inconsistencia=0;  //actas fuera de catalogo
 /////////////////esperadas
- $q="select * from (select count(*) as esperadas, sum(lista_nominal) as ln from scd_casillas ) as esperadas";
+ $q="select * from (select count(*) as esperadas, sum(lista_nominal) as ln from scd_casillas ) 
+ as esperadas";
 
  $rows = $db->query($q);
  if($r = $rows->fetchArray())
 	{
-   $esperadas=$r['esperadas'];  //actas fuera de catalogo
- }
+   $esperadas=$r['esperadas']-1;  //actas  menos extrangero
+    }
 //////////////// estas  son las contabilizados
 
 $q="SELECT id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nominal) AS ln, 
         SUM(votos_cand_no_reg) AS votos_cand_no_reg, SUM(votos_nulos) AS votos_nulos,
-        SUM(votacion_total) AS votacion_total, sum(ciudadanos_votaron) as ciudadanos_votaron FROM scd_votos P
-        LEFT JOIN scd_casillas C ON P.id_distrito = C.id_distrito 
+        SUM(votacion_total) AS votacion_total, sum(ciudadanos_votaron) as ciudadanos_votaron FROM scd_votos P LEFT JOIN scd_casillas C ON P.id_distrito = C.id_distrito 
         AND P.id_delegacion = C.id_delegacion 
         AND P.id_seccion = C.id_seccion 
         AND P.tipo_casilla = C.tipo_casilla
@@ -320,25 +443,9 @@ $q="SELECT id_tipo_eleccion, COUNT(C.id_distrito) AS cuantos, SUM(C.lista_nomina
 //	$v_participacion=$r['participacion'];
 
        }
-//////////// Me traigo las especiales por voto ///////
-        
-  $q="select count(*)as especial from scd_votos where tipo_casilla like '%S%'and
- id_tipo_eleccion= 4 and contabilizar ='T'";
- 
- $rows = $db->query($q);
-        if($r = $rows->fetchArray())
-        {      
-        
-        
-    $votos_sin_especiales=$r['especial'];   
-        }
-        
-   $v_votacion_sin_especiales = $v_votacion_total-$votos_sin_especiales;     
-            
 
 /////////////////////////// no contabilizadas
-$q ="
-SELECT id_tipo_eleccion, count(C.id_distrito) AS cuantos, SUM(C.lista_nominal) AS ln, 
+$q ="SELECT id_tipo_eleccion, count(C.id_distrito) AS cuantos, SUM(C.lista_nominal) AS ln, 
 SUM(votos_cand_no_reg) AS votos_cand_no_reg, 
 SUM(votos_nulos) AS votos_nulos,
 SUM(votacion_total) AS votacion_total
@@ -354,31 +461,63 @@ $rows = $db->query($q);
 if($r = $rows->fetchArray()){
 $v_nocontabilizadas=$r['cuantos'];
 
-// esta linea estaba madreada
-//$v_votacion_sin_especiales=$r['votacion_total']-$r['votacion_sin_especiales'];
-
-// la cambia JRA 12 de mayo 16:10
-//$v_votacion_sin_especiales = isset($r['votacion_sin_especiales']) ? $r['votacion_total'] - $r['votacion_sin_especiales'] : $r['votacion_total'];
-
 
 }
 
+/////////// Me traigo las especiales por voto ///////
+        
+  $q="select count(*)as especial from scd_votos where tipo_casilla like '%S%'and
+ id_tipo_eleccion= 4 and contabilizar ='T'";
+ 
+ $rows = $db->query($q);
+        if($r = $rows->fetchArray())
+        {      
+        
+        
+    $votos_sin_especiales=$r['especial'];   
+        }
+        
+   $v_votacion_sin_especiales = $v_votacion_total-$votos_sin_especiales-$v_nocontabilizadas;
 
-  fputcsv($f,array('ACTAS_ESPERADAS','ACTAS_REGISTRADAS','ACTAS_FUERA_CATALOGO','ACTAS_CAPTURADAS','PORCENTAJE_ACTAS_CAPTURADAS', 
-  'ACTAS_CONTABILIZADAS', 'PORCENTAJE_ACTAS_CONTABILIZADAS', 'PORCENTAJE_ACTAS_INCONSISTENCIAS', 'ACTAS_NO_CONTABILIZADAS',
-   'LISTA_NOMINAL_ACTAS_CONTABILIZADAS', 'TOTAL_VOTOS_C_CS', 'TOTAL_VOTOS_S_CS', 'PORCENTAJE_PARTICIPACION_CIUDADANA'));
+     fputcsv($f, array(
+    //   'ACTAS_ESPERADAS',
+			// 'ACTAS_REGISTRADAS',
+			// 'ACTAS_FUERA_CATALOGO',
+			// 'ACTAS_CAPTURADAS',
+			// 'PORCENTAJE_ACTAS_CAPTURADAS',
+			'ACTAS_COMPUTADAS',
+			// 'PORCENTAJE_ACTAS_COMPUTADAS',
+			// 'PORCENTAJE_ACTAS_INCONSISTENCIAS',
+			// 'ACTAS_NO_COMPUTADAS',
+			'LISTA_NOMINAL_ACTAS_CAPTURADAS',
+			'TOTAL_VOTOS',
+			// 'TOTAL_VOTOS_S_CS',
+			'PORCENTAJE_PARTICIPACION_CIUDADANA'
+     )
+     );
 
-  //fputcsv($f,array($esperadas, $a_registradas, $v_fuera_catalogo, $a_registradas,
-  //number_format((($a_registradas*100)/$esperadas), 4, '.', ','), $v_contabilizadas,
-  //number_format((($v_contabilizadas*100)/$esperadas), 4, '.', ','), number_format((($v_inconsistencia*100)/$esperadas), 4, '.', ','),
-  //$v_nocontabilizadas,$listaContabilizada,$v_votacion_total,$v_votacion_sin_especiales,$v_participacion));
-
-  fputcsv($f,array($esperadas, $a_registradas, $v_fuera_catalogo, $a_registradas,
-  number_format((($a_registradas/$esperadas)*100), 4, '.', ','), $v_contabilizadas,
-  number_format((($v_contabilizadas/$esperadas)*100), 4, '.', ','), number_format((($v_inconsistencia/$esperadas)*100), 4, '.', ','),
-  $v_nocontabilizadas,$listaContabilizada,$v_votacion_total,$v_votacion_sin_especiales,
-number_format((($v_votacion_total/$listaContabilizada)*100), 4, '.', ',')));   
-                 //  number_format((($v_votacion_total/$listaContabilizada)*100), 4, '.', ',')));
+     //fputcsv($f,array($esperadas, $a_registradas, $v_fuera_catalogo, $a_registradas,
+     //number_format((($a_registradas*100)/$esperadas), 4, '.', ','), $v_contabilizadas,
+     //number_format((($v_contabilizadas*100)/$esperadas), 4, '.', ','), number_format((($v_inconsistencia*100)/$esperadas), 4, '.', ','),
+     //$v_nocontabilizadas,$listaContabilizada,$v_votacion_total,$v_votacion_sin_especiales,$v_participacion));
+ 
+     fputcsv($f, array(
+    //    $esperadas,
+      //  $a_registradas,
+       $v_fuera_catalogo,
+    //    $a_registradas,
+    //    number_format((($a_registradas / $esperadas) * 100), 4, '.', ','),
+       $v_contabilizadas,
+    //    number_format((($v_contabilizadas / $esperadas) * 100), 4, '.', ','),
+      //  number_format((($v_inconsistencia / $esperadas) * 100), 4, '.', ','),
+      //  $v_nocontabilizadas,
+       $listaContabilizada,
+       $v_votacion_total,
+      //  $v_votacion_sin_especiales,
+       number_format((($v_votacion_total / $listaContabilizada) * 100), 4, '.', ',')
+     )
+     );
+     //  number_format((($v_votacion_total/$listaContabilizada)*100), 4, '.', ',')));
 
 
 		// INICIA RENGLO EN BLANCO GENERA UN SALTO DE LINEA 
@@ -399,7 +538,7 @@ number_format((($v_votacion_total/$listaContabilizada)*100), 4, '.', ',')));
 		
 		$zip = new ZipArchive();
 		$date = $r3['anio'].$r3['mes'].$r3['dia'].'_'.$r3['hora'].$r3['minuto'];
-		$filename = $date."_PREP_ALC_CDMX.zip";
+		$filename = $date."_SICODID_ALC_CDMX.zip";
 
 		if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) {
 			exit("cannot open <$filename>\n");
@@ -407,7 +546,7 @@ number_format((($v_votacion_total/$listaContabilizada)*100), 4, '.', ',')));
 
 		$zip->addFile("bd-alcalde.csv","CDMX_ALC_2024.csv");
 		$zip->addFile("CDMX_ALC_CANDIDATURAS.csv","CDMX_ALC_CANDIDATURAS_2024.csv");
-		$zip->addFile("LEEME_A.txt","leeme.txt");
+		// $zip->addFile("LEEME_A.txt","leeme.txt");
 
 		$zip->close();
 		//fputcsv($f, $lineData, $delimiter);
