@@ -286,7 +286,7 @@ try {
 		and V.tipo_casilla = C.tipo_casilla
 		left join dig_actas_prep D on V.id_distrito = D.id_distrito
 		and V.clave_mdc = D.acta
-	where V.id_tipo_eleccion = '.$type.$filtro_tipo_acta .' ORDER BY CAST(SUBSTR(V.tipo_casilla, 2) AS INTEGER) ASC;';
+	where V.id_tipo_eleccion = '.$type.$filtro_tipo_acta;
 		
 		if($item!=""){
 			$qryData .= " and ".$name_item.'='.$item;
@@ -297,13 +297,15 @@ try {
 			$qryData .= " and V.id_seccion = ".$item_2;
 		}
 		if($item_3!=""){
-			$qryData .= " and V.tipo_casilla = '".$item_3."';";
+			$qryData .= " and V.tipo_casilla = '".$item_3."'";
 		}
+
+		$qryData .= ' ORDER BY CAST(SUBSTR(V.tipo_casilla, 2) AS INTEGER) ASC;';
 		
 					
 		$itemRecords["columns"] = $itemNameRecords;
 		
-//echo "<br>".$qryData; return;
+// echo "<br>".$qryData; return;
 		
 		$itemRecords["data"] = array();
 		$itemRecords["participacion"]= array();
