@@ -206,7 +206,7 @@ function LeeVotosPrep(){
 			
 		}
 		
-		//echo $participanSUM; return ;
+		// echo $participanSUM; return ;
 		// Cargo últimos nombre de columnas
 		
 		//$tmp = ['tipo_casilla','votos_cand_no_reg', 'votos_nulos', 'votacion_total'];
@@ -284,7 +284,7 @@ function LeeVotosPrep(){
     left join scd_casillas C 
 		on V.id_distrito = C.id_distrito and V.id_delegacion = C.id_delegacion 
 		and V.id_seccion = C.id_seccion and V.tipo_casilla = C.tipo_casilla
-    where  V.id_distrito in (0,1,2,3,4,5,6,8,9,10,11,15,16,18,19,22,23,24,27,28,32,33) and V.id_tipo_eleccion in (2) 
+    where  V.id_distrito in (34,1,2,3,4,5,6,8,9,10,11,15,16,18,19,22,23,24,27,28,32,33) and V.id_tipo_eleccion in (2) 
     and V.validado='T' and V.contabilizar='T' group by V.id_distrito
     UNION ALL
     SELECT V.id_distrito as 'id_distrito',
