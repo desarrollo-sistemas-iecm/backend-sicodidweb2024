@@ -1433,7 +1433,7 @@ function consigueDatosDMR($type, $item){
 						 0 as residuo16,
 						 0 as residuo17
 						FROM scd_votos as V 
-						where id_tipo_eleccion in(2,3) and contabilizar='T' group by id_distrito
+						where id_tipo_eleccion = $type and contabilizar='T' group by id_distrito
 				),
 				suma_igual AS (
 					SELECT id_distrito, 

@@ -168,7 +168,7 @@ try {
 			
 			
 		}
-		//////////////////////////////////////////// Comentar para relación nivel entidad por DRM, agrega RP. Comentar líneas pertinenter si da problemas //////////////////////////
+		/*
 		if(isset($itemRecords["resumen_dmr"][0])){
 
 			$itemRecords["resumen_dmr"][0]["votos_acumulados"] += isset($itemRecords["resumen_rp"][0]["votos_acumulados"])?$itemRecords["resumen_rp"][0]["votos_acumulados"]:0;
@@ -201,7 +201,7 @@ try {
 			 $itemRecords["resumen_dmr"][0]["nulos_por"] = sprintf("%01.4f", $nulos_por)."%";
 			 
 		}
-		///////////////////////////////////////////////////////// fin comentar //////////////////////////
+		*/
 		if(isset($itemRecords["capturadas_dmr"][0])){
 			$itemRecords["capturadas_dmr"][0]["actas_capturadas"] += isset($itemRecords["capturadas_rp"][0]["actas_capturadas"])?$itemRecords["capturadas_rp"][0]["actas_capturadas"]:0;
 			
